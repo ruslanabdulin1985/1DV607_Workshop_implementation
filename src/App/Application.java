@@ -10,13 +10,20 @@ public class Application {
 	ArrayList<Boats.Boat> boatList = new ArrayList<Boats.Boat>();
 	
 	Database.Operations db = new Database.Operations();
-	
+	String status = "mainMenu";
 	
 	public Application() {
 		this.fillLists();
-        addMember(memberList.get(0));
+//        addMember(memberList.get(0));
 	}
 	
+	public String getStatus() {
+		return status;
+	}
+	
+	public void setStatus(String stts) {
+		status = stts;
+	}
 	
 	public void fillLists() {
 		String[] filenames = db.getMemFiles();

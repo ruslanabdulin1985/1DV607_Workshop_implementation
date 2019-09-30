@@ -19,12 +19,38 @@ public class Console {
 	public static void main (String[] args) {
 		String userInput;
 		Scanner sc = new Scanner(System.in);
+		
+//		boolean nextStep = false;
+//		
+//		while (!nextStep) {
+//		
 		mainMenu();
-		userInput = sc.nextLine();
-		if (userInput.equals("1")) {
+		while (!runningApp.getStatus().equals("exit")) {
+			userInput = sc.nextLine();
 			
-			compactList();
+			if (runningApp.getStatus().equals("mainMenu")){
+				if (userInput.equals("1")) {
+//					nextStep = true;
+					runningApp.setStatus("compactList");
+					compactList();
+					
+				}
+			}
+			
+			else if (runningApp.getStatus().equals("compactList")){
+				if (userInput.equals("v")) {
+					System.out.println("Works!!!!!");
+				}
+			}
 		}
+		
+			
+			
+		
+		
+		userInput = sc.nextLine();
+		
+		
 	}
 	
 	@SuppressWarnings("unchecked")
