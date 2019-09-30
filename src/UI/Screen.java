@@ -15,10 +15,9 @@ public class Screen {
 		text = text + line + "\n";
 	}
 	
-	public int addItemLine(String line) {
-		itemcounter ++;
-		text =text + String.valueOf(itemcounter) + ". " + line + "\n";
-		return itemcounter;
+	public void addItemLine(String ID, String item) {
+		
+		text = text + ID + " - " + item + "\n";
 	}
 	
 	public void addCommandLine() {

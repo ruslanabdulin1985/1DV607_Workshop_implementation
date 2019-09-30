@@ -1,10 +1,18 @@
 package UI;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Map;
 import java.util.Scanner;
+
+import App.Application;
+import Members.Member;
 
 
 public class Console {
 	
 //	private static int iface = 0;
+	
+	static App.Application runningApp = new App.Application();
 	
 	
 	
@@ -19,14 +27,24 @@ public class Console {
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
 	private static void compactList() {
 		Screen compactList = new Screen("compactList");
 		compactList.addTextLine("Compact List of Members:");
 		compactList.addTextLine("");
-		for(int i = 0; i<=2; i++) {
-		compactList.addItemLine("MemberName");
+		compactList.addTextLine("ID " + " item");
+		
+		ArrayList<String[]> members = (ArrayList<String[]>) runningApp.getMembersAsStringArrays().clone();
+		
+		for (String[] member : members) 
+		{
+			compactList.addItemLine(member[0] , member[1]) ;
 		}
-		System.out.print(compactList.getText());	
+		compactList.addTextLine("");
+
+		compactList.addTextLine("a - Add, v-Verbose List, UID-Detail");
+		compactList.addCommandLine();
+		System.out.print(compactList.getText());
 	}
 
 	private static void mainMenu() {
