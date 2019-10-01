@@ -24,11 +24,22 @@ class General {
 	}
 	
 
-	@Test
+//	@Test
 	void listOfFiles() {
 		Database.Operations db = new Database.Operations();
 		db.getMemFiles();
 	
 	}
-
+	//@Test
+	void TestAddBoat() {
+		Database.Operations db = new Database.Operations();
+	String [] bt = {String.valueOf(db.getNextBID()), "kayak", "10"};
+	db.AddBoatFile(bt);
+	}
+	
+//	void CheckBoat() {
+//	Database.Operations db = new Database.Operations();
+//	String [] bt = {String.valueOf(db.()), "kayak", "10"};
+//	db.AddBoatFile(bt);
+//	}
 }

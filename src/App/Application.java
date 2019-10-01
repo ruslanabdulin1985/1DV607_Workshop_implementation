@@ -32,16 +32,31 @@ public class Application {
 			Members.Member mbr = new Members.Member1(strArrMem);
 			memberList.add(mbr);
 		}
+		filenames = db.getBoatFiles();
+		for (String filename : filenames) {
+			String[] strArrBoat = db.readBoatFile(filename);
+			Boats.Boat bt = new Boats.Boat1(strArrBoat);
+			boatList.add(bt);
+			System.out.println(bt.toString());
+		}
+		
 	}
 	
 	public ArrayList<Members.Member> getMemberList(){
 		return memberList;
 	}
 	
+	public void addBoat(String[] arr) {
+		arr[0] = String.valueOf(db.getNextBID());
+		Boats.Boat bt = new Boats.Boat1(arr);
+		boatList.add(bt);
+		db.AddMemberFile(bt.toArr());
+	}
 	
-	private void addMember(Member mbr) {
-		
-	
+	public void addMember(String[] arr) {
+		arr[0] = String.valueOf(db.getNextUID());
+		Members.Member mbr = new Members.Member1(arr);
+		memberList.add(mbr);
 		db.AddMemberFile(mbr.toArr());
 	}
 	
@@ -55,11 +70,31 @@ public class Application {
 		}
 		
 		return toReturn;
-		
-		
-		
 	}
 	
+	public ArrayList<String[]>getBoatsAsStringArrays(){
+		
+		ArrayList<String[]> toReturn = new ArrayList<String[]>();
+		
+		for (Boats.Boat n : boatList) {
+			String[] arr = {String.valueOf(n.getBID()), n.getType(), String.valueOf(n.getLength()), String.valueOf(n.getUID())};
+			toReturn.add(arr);
+		}
+		
+		return toReturn;
+	}
+	
+	
+	public String[] getMemberById(String id) {
+		String[] toReturn = null;
+		int uid = Integer.valueOf(id);
+		for (Members.Member member : memberList) {
+			if (member.getUID() == uid) 
+				return member.toArr();
+		}
+		
+		return toReturn;
+	}
 		
 	
 	
