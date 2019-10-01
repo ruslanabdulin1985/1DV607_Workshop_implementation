@@ -3,6 +3,7 @@ import java.io.BufferedWriter;
 import java.util.ArrayList;
 import java.util.Map;
 
+import Boats.Boat;
 import Members.Member;
 
 public class Application {
@@ -32,6 +33,7 @@ public class Application {
 			Members.Member mbr = new Members.Member1(strArrMem);
 			memberList.add(mbr);
 		}
+		
 		filenames = db.getBoatFiles();
 		for (String filename : filenames) {
 			String[] strArrBoat = db.readBoatFile(filename);
@@ -39,7 +41,6 @@ public class Application {
 			boatList.add(bt);
 			System.out.println(bt.toString());
 		}
-		
 	}
 	
 	public ArrayList<Members.Member> getMemberList(){
@@ -50,7 +51,7 @@ public class Application {
 		arr[0] = String.valueOf(db.getNextBID());
 		Boats.Boat bt = new Boats.Boat1(arr);
 		boatList.add(bt);
-		db.AddMemberFile(bt.toArr());
+		db.AddBoatFile(bt.toArr());
 	}
 	
 	public void addMember(String[] arr) {
@@ -83,6 +84,23 @@ public class Application {
 		
 		return toReturn;
 	}
+	
+	public String getBoatsByUID(String UID) {
+		String toReturn = "\n";
+		
+		for (int i=0; i<memberList.size(); i++) {
+			if (String.valueOf(memberList.get(i).getUID()).equals(UID)) {
+				for (int j=0; j<boatList.size(); j++) {
+					if (String.valueOf(boatList.get(j).getUID()).equals(UID))
+						toReturn = toReturn + "\t" + String.valueOf(boatList.get(j).getBID()) + " - " + boatList.get(j).getType() + " - " + String.valueOf(boatList.get(j).getLength() + "\n");
+				}
+			}
+		}
+		
+		return toReturn;	
+	}
+	
+	
 	
 	
 	public String[] getMemberById(String id) {

@@ -95,15 +95,26 @@ public class Console {
 					buffer.clear();
 					runningApp.setStatus("addBoatType");
 					addBoatType();
-					buffer.add(sc.nextLine());
+					String typeID = sc.nextLine();
+					if (typeID.equals("1"))
+						buffer.add("Kayak/Canoe");
+					else if (typeID.equals("2"))
+						buffer.add("Motorsailer");
+					else if (typeID.equals("3"))
+						buffer.add("Motorsailer");
+					else if (typeID.equals("4"))
+						buffer.add("Other");
+					
 					addBoatLength();
 					buffer.add(sc.nextLine());
-					//addBoatReg();
-					buffer.add("0001");
+					addBoatReg();
+					buffer.add(sc.nextLine());
 					
-					String[] bt = {"null",buffer.get(0),buffer.get(1),buffer.get(2)};
+					String[] bt = {"null", buffer.get(0),buffer.get(1),buffer.get(2)};
 					runningApp.addBoat(bt);
 					buffer.clear();  // 
+					runningApp.setStatus("boatList");
+					boatList();
 				}
 			}
 		}
@@ -122,7 +133,7 @@ public class Console {
 		
 		for (String[] boat : boats) 
 		{
-			boatList.addItemLine(boat[0] , boat[1], boat[2], boat[3]) ;
+			boatList.addItemLine(boat[0] , boat[1], boat[2], runningApp.getMemberById(boat[3])[1]) ;
 		}
 		boatList.addTextLine("");
 
@@ -155,10 +166,10 @@ public class Console {
 		Screen addLength = new Screen("addType");
 		addLength.addTextLine(":::Register Boat:::");
 		addLength.addTextLine("");
-		addLength.addTextLine("kayak/Canoe");
-		addLength.addTextLine("Motorsailer");
-		addLength.addTextLine("Sailboat");
-		addLength.addTextLine("Other");
+		addLength.addItemLine("1", "Kayak/Canoe");
+		addLength.addItemLine("2", "Motorsailer");
+		addLength.addItemLine("3", "Sailboat");
+		addLength.addItemLine("4", "Other");
 		addLength.addTextLine("");
 		addLength.addTextLine("Enter type number :");
 		addLength.addCommandLine();
@@ -169,13 +180,17 @@ public class Console {
 		Screen addReg = new Screen("addReg");
 		addReg.addTextLine(":::Register Boat:::");
 		addReg.addTextLine("");
-		addReg.addTextLine("kayak/Canoe");
-		addReg.addTextLine("Motorsailer");
-		addReg.addTextLine("Sailboat");
-		addReg.addTextLine("Other");
+		addReg.addTextLine("Choose an owner :");
 		addReg.addTextLine("");
-		addReg.addTextLine("Enter type number :");
+		ArrayList<String[]> members = (ArrayList<String[]>) runningApp.getMembersAsStringArrays().clone();
+		
+		for (String[] member : members) 
+		{
+			addReg.addItemLine(member[0] , member[1]) ;
+		}
+		addReg.addTextLine("");
 		addReg.addCommandLine();
+		
 		System.out.print(addReg.getText());
 	}
 	
@@ -198,6 +213,10 @@ public class Console {
 		memDetail.addTextLine("User ID : " + member[0]);
 		memDetail.addTextLine("Name : " + member[1]);
 		memDetail.addTextLine("Personal Number : " + member[2]);
+		memDetail.addTextLine("");
+		memDetail.addTextLine(":Boats registred:");
+		memDetail.addTextLine("\tID - type - length:");
+		memDetail.addTextLine(runningApp.getBoatsByUID(UID)); 
 		memDetail.addTextLine("");
 		memDetail.addTextLine("e - Edit, d - Delete, b - Back");
 		memDetail.addCommandLine();

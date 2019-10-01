@@ -66,7 +66,7 @@ public class Operations {
 			BufferedWriter writer;
 //			System.out.println(saveFile.getPath());
 			writer = new BufferedWriter(new FileWriter(saveFile.getPath()));
-			String toFile = boat[0] + "," + boat [1] + "," + boat[2];
+			String toFile = boat[0] + "," + boat [1] + "," + boat[2] + "," + boat[3];
 			writer.write(toFile);
 			writer.close();
 		} catch (IOException e) {
