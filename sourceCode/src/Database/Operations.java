@@ -17,6 +17,10 @@ public class Operations {
 	
 	String defaultPathBoats = "db/boats/";
 	
+	public ArrayList<Members.Member> getMemberList() {
+		return null;
+	}
+	
 	public int getNextUID(){
 		File folder = new File(defaultPathMembers);
 		String[] files = folder.list();
@@ -107,6 +111,7 @@ public class Operations {
 	Scanner sc;
 	try {
 		sc = new Scanner(file);
+		
 		data = sc.nextLine(); //take the data from file
 		sc.close();
 	} catch (FileNotFoundException e) {
