@@ -33,9 +33,10 @@ public class EngConsole {
 		while (!this.runningApp.getStatus().equals("exit")) {
 			userInput = sc.nextLine(); 
 			
-			if (userInput.equals("q"))
-				Runtime.getRuntime().exit(10);  // if input q than exit
-			
+			if (userInput.equals("q")) {
+				this.exitApp();
+				runningApp.exit();  // if input q than exit
+			}
 			// In main menu
 			if (runningApp.getStatus().equals("mainMenu")){
 				if (userInput.equals("1")) {
@@ -66,11 +67,10 @@ public class EngConsole {
 				}
 				
 				else if(isDigit(userInput)) {
-					//System.out.println("else" + runningApp.getMemberById(userInput));
-					if (runningApp.getMemberById(userInput) == null)
+					if (runningApp.getMemberById(Integer.valueOf(userInput)) == null)
 						this.compactList();
 					
-					else if (!(runningApp.getMemberById(userInput)==null)) {
+					else if (!(runningApp.getMemberById(Integer.valueOf(userInput))==null)) {
 						runningApp.setStatus("memberDetail");
 						UIDbuffer = userInput;
 						this.memberDetail(userInput);
@@ -161,8 +161,8 @@ public class EngConsole {
 					addBoatReg();
 					buffer.add(sc.nextLine());
 					
-					String[] bt = {"null", buffer.get(0),buffer.get(1),buffer.get(2)};
-					runningApp.addBoat(bt);
+					//String[] bt = {"null", buffer.get(0),buffer.get(1),buffer.get(2)};
+					runningApp.addBoat(buffer.get(0),Integer.valueOf(buffer.get(1)),Integer.valueOf(buffer.get(2)));
 					buffer.clear();  // 
 					runningApp.setStatus("boatList");
 					boatList();
@@ -213,6 +213,12 @@ public class EngConsole {
 		
 	}
 	
+	private void exitApp() {
+		Screen exitApp = new Screen("exitApp");
+		exitApp.addTextLine("Application is closed");
+		System.out.print(exitApp.getText());
+	}
+
 	private void boatList() {
 		Screen boatList = new Screen("boatList");
 		boatList.addTextLine(":::List of Boats:::");
@@ -223,7 +229,7 @@ public class EngConsole {
 		
 		for (String[] boat : boats) 
 		{
-			boatList.addItemLine(boat[0] , boat[1], boat[2], runningApp.getMemberById(boat[3])[1]) ;
+			boatList.addItemLine(boat[0] , boat[1], boat[2], runningApp.getMemberArrById(Integer.valueOf(boat[3]))[1]);// boat[3])[1]) ;
 		}
 		boatList.addTextLine("");
 
@@ -296,7 +302,7 @@ public class EngConsole {
 	
 
 	private void memberDetail(String UID) {
-		String [] member = runningApp.getMemberById(UID);
+		String [] member = runningApp.getMemberArrById(Integer.valueOf(UID));
 		Screen memDetail = new Screen("compactList");
 		memDetail.addTextLine(":::Member's Detail:::");
 		memDetail.addTextLine("");
@@ -321,7 +327,7 @@ public class EngConsole {
 		memDetail.addTextLine("Boat ID : " + boat[0]);
 		memDetail.addTextLine("Type : " + boat[1]);
 		memDetail.addTextLine("Length : " + boat[2]);
-		memDetail.addTextLine("Registred to : " + runningApp.getMemberById(boat[3])[1]);
+		memDetail.addTextLine("Registred to : " + runningApp.getMemberArrById(Integer.valueOf(boat[3]))[1]);
 		memDetail.addTextLine("");
 		memDetail.addTextLine("e-Edit, d-Delete, b-Back");
 		memDetail.addCommandLine();

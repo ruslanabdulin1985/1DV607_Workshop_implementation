@@ -47,7 +47,6 @@ public class Member{
 		return name;
 	}
 	
-	// Do I need this?
 	public String[] toArr() {
 		String [] arr = {String.valueOf(UID), name, personalNumber};
 		return arr;

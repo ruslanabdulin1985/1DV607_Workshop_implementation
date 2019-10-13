@@ -2,70 +2,51 @@ package Model;
 
 public class Boat{
 
-	String type = "";
-	int length =0;
-	int UID =0;
-	int BID = 0;
-	Member owner = new Member();
-	
-	public Boat(String[] arr) {
-		UID = Integer.valueOf(arr[3]);
-		type = arr[1];
-		length =Integer.valueOf(arr[2]);
-		BID = Integer.valueOf(arr[0]);
+	String type;
+	int length;
+	int BID;
+	Member owner;
+
+	public Boat() {
+	type = "";
+	length =0;
+	BID = 0;
+	owner = new Member();
 	}
 	
+	public Boat(int bBID, String bType, int bLength, Member m) {
+		BID = bBID;
+		type = bType;
+		length = bLength;
+		owner = m;
+	}
 	
 	public String getType() {
-		// TODO Auto-generated method stub
 		return type;
 	}
 
-
 	public void setType(String typeToBeSet) {
-		// TODO Auto-generated method stub
 		type = typeToBeSet;
 	}
 
 	public int getLength() {
-		// TODO Auto-generated method stub
 		return length;
 	}
-
-	
-	public void setLength(String persunNumber) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	
-	public int getUID() {
-		// TODO Auto-generated method stub
-		return UID;
-	}
-	
 	
 	public String[] toArr() {
-		// TODO Auto-generated method stub
-		String [] toReturn = {String.valueOf(BID), type, String.valueOf(length), String.valueOf(UID)};
+		String [] toReturn = {String.valueOf(BID), type, String.valueOf(length), String.valueOf(owner.getUID())};
 		return toReturn;
 	}
 
 	public String toString() {
-		// TODO Auto-generated method stub
-		return String.valueOf(BID) + type + String.valueOf(length) + String.valueOf(UID);
-	
-	}
-	
-	public void setUID(int userID) {
-		// TODO Auto-generated method stub
-		UID = userID;
-	}
-	
+		return String.valueOf(BID) + type + String.valueOf(length) + String.valueOf(owner.getUID());
+	}	
 	
 	public int getBID() {
-		// TODO Auto-generated method stub
 		return BID;
 	}
-	
+
+	public Member getOwner() {
+		return owner;
+	}
 }
