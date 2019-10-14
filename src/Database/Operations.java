@@ -7,36 +7,114 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import java.util.Scanner;
+
+import Model.Member;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.lang.Object;
 
+
+
 public class Operations {
+	int nextUID = loadNextUID();
+	int nextBID = loadNextBID();
 	
 	String defaultPathMembers = "db/members/";
 	
 	String defaultPathBoats = "db/boats/";
 	
-	public int getNextUID(){
-		File folder = new File(defaultPathMembers);
-		String[] files = folder.list();
-		Arrays.sort(files);
-		String finID = files[files.length-1];
-		//System.out.println(files.length);
-		finID = finID.substring(0, finID.lastIndexOf('.'));
-//		System.out.println(finID);
-		return Integer.valueOf(finID)+1;
+	public int getNextUID() {
+		return nextUID;
 	}
 	
+	private void increaseNextUID() {
+		nextUID++;
+	}
+	
+	private void increaseNextBID() {
+		nextBID++;
+	}
+	
+	public void saveNextUID() {
+		File maxID = new File("db/members/max.id");
+		try {
+			BufferedWriter writer;
+//			System.out.println(saveFile.getPath());
+			writer = new BufferedWriter(new FileWriter(maxID.getPath()));
+			String toFile = String.valueOf(nextUID);
+			writer.write(toFile);
+			writer.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public int loadNextUID() {
+		File maxID = new File("db/members/max.id");
+		Scanner sc;
+		String data = "";
+		int toReturn = 0;
+		try {
+			sc = new Scanner(maxID);
+			
+			data = sc.nextLine(); //take the data from file
+			sc.close();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		try {
+			toReturn = Integer.valueOf(data);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		return toReturn;
+	}
+	
+	public int loadNextBID() {
+		File maxID = new File("db/boats/max.id");
+		Scanner sc;
+		String data = "";
+		int toReturn = 0;
+		try {
+			sc = new Scanner(maxID);
+			data = sc.nextLine(); //take the data from file
+			sc.close();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		try {
+			toReturn = Integer.valueOf(data);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		return toReturn;
+	}
+	
+	
+	public void saveNextBID() {
+		File maxID = new File("db/boats/max.id");
+		try {
+			BufferedWriter writer;
+			writer = new BufferedWriter(new FileWriter(maxID.getPath()));
+			String toFile = String.valueOf(nextBID);
+			writer.write(toFile);
+			writer.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	
 	public int getNextBID(){
-		File folder = new File(defaultPathBoats);
-		String[] files = folder.list();
-		Arrays.sort(files);
-		String finID = files[files.length-1];
-//		System.out.println(files.length);
-		finID = finID.substring(0, finID.lastIndexOf('.'));
-//		System.out.println(finID);
-		return Integer.valueOf(finID)+1;
+		return nextBID;
 	}
 	
 	public void AddMemberFile(String [] mbr) {
@@ -52,6 +130,19 @@ public class Operations {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+		this.increaseNextUID();
+		this.saveNextUID();
+	}
+	public void RemoveMemberFile(int mUID) {
+		File toDelete = new File(defaultPathMembers + String.valueOf(mUID) + ".mem");
+		try {
+			toDelete.delete();
+			System.out.print(toDelete.toString());
+		
+		}
+		catch (Exception e) {
+			System.out.print("can't delete " + e.getMessage()  );
 		}
 	}
 	
@@ -69,19 +160,48 @@ public class Operations {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		increaseNextBID();
+		saveNextBID();
 	}
 	
-	public String[] getMemFiles() {
-	File dir = new File(defaultPathMembers);
-	return dir.list();
+	public String[][] getMembers() {
+		String [][] toReturn = new String[0][3];
+		for (String filename : getMemFiles()) {
+			toReturn = Arrays.copyOf(toReturn, toReturn.length + 1);
+			toReturn[toReturn.length - 1] = readMemberFile(filename);
+		}
+		return toReturn;
+	}
+	
+	private String[] getMemFiles() {
+		File dir = new File(defaultPathMembers);
+		String[] toReturn = new String[0];
+		String[] total = dir.list();
+		for (String f : total) {
+			if(f.contains(".mem")) {
+				toReturn = Arrays.copyOf(toReturn, toReturn.length + 1);
+				toReturn[toReturn.length - 1] = f;
+			}
+		
+		}
+		return toReturn;
 	}
 	
 	public String[] getBoatFiles() {
+		
 		File dir = new File(defaultPathBoats);
-		return dir.list();
+		String[] toReturn = new String[0];
+		String[] total = dir.list();
+		for (String f : total) {
+			if(f.contains(".boat")) {
+				toReturn = Arrays.copyOf(toReturn, toReturn.length + 1);
+				toReturn[toReturn.length - 1] = f;
+			}
+		
 		}
-	
-	
+		return toReturn;
+		
+	}
 	
 	public String[] readBoatFile(String filename) {
 		File file = new File("db/boats/"+filename);
@@ -101,7 +221,7 @@ public class Operations {
 		return toReturn;
 		}
 	
-	public String[] readMemberFile(String filename) {
+	public String[] readMemberFile(String filename){
 	File file = new File("db/members/"+filename);
 	String data = "";
 	Scanner sc;
@@ -119,5 +239,14 @@ public class Operations {
 	return toReturn;
 	
 	
+	}
+
+	public String[][] getBoats() {
+		String [][] toReturn = new String[0][4];
+		for (String filename : getBoatFiles()) {
+			toReturn = Arrays.copyOf(toReturn, toReturn.length + 1);
+			toReturn[toReturn.length - 1] = readBoatFile(filename);
+		}
+		return toReturn;
 	}
 }

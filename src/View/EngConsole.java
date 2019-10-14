@@ -1,7 +1,6 @@
 package View;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Map;
 import java.util.Scanner;
 
 import Model.Application;
@@ -52,7 +51,6 @@ public class EngConsole {
 				else if (userInput.equals("3")) {
 					Runtime.getRuntime().exit(10);
 				}	
-				
 			}
 			
 			// In compact List menu
@@ -85,6 +83,8 @@ public class EngConsole {
 					buffer.add(sc.nextLine());
 					String[] mem = {"null",buffer.get(0),buffer.get(1)};
 					runningApp.addMember(mem);
+					runningApp.setStatus("compactList");
+					this.compactList();
 					buffer.clear();  // 
 				}
 				
@@ -92,7 +92,24 @@ public class EngConsole {
 					this.compactList();
 			}
 			
+			// in Delete Member menu
+			else if (runningApp.getStatus().equals("removeMem")) {
+			
+				
+				String confirmation = sc.nextLine();
+				if (confirmation.equals("y")){
+					runningApp.deleteMember(Integer.valueOf(UIDbuffer));
+					runningApp.setStatus("compactList");
+				}
+					
+				else if( confirmation.equals("n")){
+					runningApp.setStatus("compactList");
+				}
+			}
+			
+			
 
+			
 			// in Member Detail
 			else if (runningApp.getStatus().equals("memberDetail")){
 				if (userInput.equals("b")) {
@@ -101,7 +118,19 @@ public class EngConsole {
 					this.compactList();
 				}
 				
-				
+				else if (userInput.equals("d")){
+					this.confirmAction();
+					if (sc.nextLine().equals("y")) {
+						
+						runningApp.deleteMember(Integer.valueOf(UIDbuffer));
+						this.compactList();
+						runningApp.setStatus("compactList");
+						}
+					else {
+						this.memberDetail(UIDbuffer);
+						runningApp.setStatus("memberDetail");}
+						
+				}
 				
 				else if (userInput.equals("e")) {
 					buffer.clear();
@@ -114,8 +143,9 @@ public class EngConsole {
 					buffer.clear();  // 
 					this.memberDetail(UIDbuffer);
 				}
-				
 			}
+			
+			// In 
 			
 			// In Boat List
 			else if (runningApp.getStatus().equals("boatList")) {
@@ -129,15 +159,11 @@ public class EngConsole {
 					if (runningApp.getBoatById(userInput) == null)
 						this.boatList();
 					
-					//System.out.println("else" + runningApp.getBoatById(userInput));
 					else if (!(runningApp.getBoatById(userInput)==null)) {
 						runningApp.setStatus("boatDetail");
 						BIDbuffer = userInput;
 						this.boatDetail(userInput);
 					}
-				}
-				else if (userInput.equals("d")){
-					this.notImplemented();
 				}
 				
 				else if (userInput.equals("a")) {
@@ -223,7 +249,7 @@ public class EngConsole {
 		Screen boatList = new Screen("boatList");
 		boatList.addTextLine(":::List of Boats:::");
 		boatList.addTextLine("");
-		boatList.addTextLine("ID " + " type " + " length " + " member ");
+		boatList.addTextLine("ID " + " type " + " length " + " owner ");
 		
 		ArrayList<String[]> boats = (ArrayList<String[]>) runningApp.getBoatsAsStringArrays().clone();
 		
@@ -312,9 +338,14 @@ public class EngConsole {
 		memDetail.addTextLine("");
 		memDetail.addTextLine(":Boats registred:");
 		memDetail.addTextLine("\tID - type - length:");
-		memDetail.addTextLine(runningApp.getBoatsByUID(UID)); 
+		String[][] boatsRegistred = runningApp.getBoatsByUID(Integer.valueOf(UID));
+		
+		for (String[] b : boatsRegistred) {
+			memDetail.addTextLine("\t" + b[0] + " | " + b[1] + " | " + b[2]);
+		}
+		memDetail.addTextLine(runningApp.getBoatsByUID(Integer.valueOf(UID)).toString()); 
 		memDetail.addTextLine("");
-		memDetail.addTextLine("e-Edit, d-Delete, b-Back");
+		memDetail.addTextLine("e-Edit, d-Delete, b-Back, q-Quit");
 		memDetail.addCommandLine();
 		System.out.print(memDetail.getText());	
 		}
@@ -329,7 +360,7 @@ public class EngConsole {
 		memDetail.addTextLine("Length : " + boat[2]);
 		memDetail.addTextLine("Registred to : " + runningApp.getMemberArrById(Integer.valueOf(boat[3]))[1]);
 		memDetail.addTextLine("");
-		memDetail.addTextLine("e-Edit, d-Delete, b-Back");
+		memDetail.addTextLine("e-Edit, d-Delete, b-Back, q - Quit");
 		memDetail.addCommandLine();
 		System.out.print(memDetail.getText());	
 		}
@@ -370,7 +401,22 @@ public class EngConsole {
 		System.out.print(mainMenu.getText());	
 	}
 	
+	private void removeMember() {
+		Screen removeMem = new Screen("removeMem");
+		removeMem.addTextLine("Provide ID of the user to be romoved");
+		removeMem.addTextLine("");
+		removeMem.addCommandLine();
+		System.out.print(removeMem.getText());
+	}
 	
+	private void confirmAction() {
+		Screen confirm = new Screen ("confirm");
+		confirm.addTextLine("Are you shure?");
+		confirm.addTextLine("");
+		confirm.addTextLine("y - Yes, n - No, q - Quit");
+		confirm.addCommandLine();
+		System.out.print(confirm.getText());
+	}
 	
 	
 	private void notImplemented() {

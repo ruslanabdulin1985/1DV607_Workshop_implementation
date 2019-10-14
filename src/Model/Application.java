@@ -2,6 +2,7 @@ package Model;
 
 import java.io.BufferedWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Map;
 
 public class Application {
@@ -16,6 +17,7 @@ public class Application {
 		boatList = new ArrayList<Model.Boat>(); // List of Boats
 		db = new Database.Operations(); // Conection to database
 		
+		
 		this.fillLists();  // download data from database
 		status = "mainMenu"; // set default status
 	}
@@ -29,23 +31,25 @@ public class Application {
 	}
 	
 	// take the data from database and put it in memory
+	private void fillMembersList(String [][] memberListArr) {
+		for (String[] memarr : memberListArr) {
+			Member newMember = new Member(Integer.valueOf(memarr[0]), memarr[1], memarr[2]);
+			this.memberList.add(newMember);
+		}
+	}
+	
+	private void fillBoatsList(String [][] boatsListArr) {
+		for (String[] boatarr : boatsListArr) {
+			System.out.print(Arrays.toString(boatsListArr));
+			Boat bt = new Boat(Integer.valueOf(boatarr[0]), boatarr[1], Integer.valueOf(boatarr[2]), getMemberById(Integer.valueOf(boatarr[3])));
+			this.boatList.add(bt);
+		}
+	}
+	
+	
 	private void fillLists() {
-		String[] filenames = db.getMemFiles();
-		
-		// fill members
-		for (String filename : filenames) {
-			String[] strArrMem = db.readMemberFile(filename);
-			Member mbr = new Member(Integer.valueOf(strArrMem[0]), strArrMem[1], strArrMem[2]);
-			this.memberList.add(mbr);
-		}
-		
-		// fill boats
-		filenames = db.getBoatFiles();
-		for (String filename : filenames) {
-			String[] strArrBoat = db.readBoatFile(filename);
-			Boat bt = new Boat(Integer.valueOf(strArrBoat[0]), strArrBoat[1], Integer.valueOf(strArrBoat[2]), getMemberById(Integer.valueOf(strArrBoat[3]) ));
-			boatList.add(bt);
-		}
+		this.fillMembersList(db.getMembers());
+		this.fillBoatsList(db.getBoats());
 	}
 	
 	public ArrayList<Member> getMemberList(){
@@ -106,7 +110,7 @@ public class Application {
 	public ArrayList<String[]>getBoatsAsStringArrays(){
 		
 		ArrayList<String[]> toReturn = new ArrayList<String[]>();
-		
+		System.out.print(boatList.size());
 		for (Model.Boat n : boatList) {
 			String[] arr = {String.valueOf(n.getBID()), n.getType(), String.valueOf(n.getLength()), String.valueOf(n.getOwner().getUID())};
 			toReturn.add(arr);
@@ -115,20 +119,19 @@ public class Application {
 		return toReturn;
 	}
 	
-	// fobiden!!!!
-	public String getBoatsByUID(String UID) {
-		String toReturn = "\n";
-		
-		for (int i=0; i<memberList.size(); i++) {
-			if (String.valueOf(memberList.get(i).getUID()).equals(UID)) {
-				for (int j=0; j<boatList.size(); j++) {
-					if (String.valueOf(boatList.get(j).getOwner().getUID()).equals(UID))
-						toReturn = toReturn + "\t" + String.valueOf(boatList.get(j).getBID()) + " - " + boatList.get(j).getType() + " - " + String.valueOf(boatList.get(j).getLength() + "\n");
-				}
+	public String[][] getBoatsByUID(int mUID) {
+		Member mem = getMemberById(mUID);
+		ArrayList<Boat> userSBoats = new ArrayList<Boat>();
+		for (int i=0; i<boatList.size(); i++) {
+			if (boatList.get(i).getOwner().equals(mem)) {
+				userSBoats.add(boatList.get(i));
 			}
 		}
+		String [][] toReturn = new String[userSBoats.size()][3];
+		for (int i=0; i<userSBoats.size(); i++)
+			toReturn[i] = userSBoats.get(i).toArr();
 		
-		return toReturn;	
+		return toReturn;
 	}
 	
 	
@@ -165,5 +168,13 @@ public class Application {
 		Runtime.getRuntime().exit(10);
 	}
 	
+	public void deleteMember(int mUID) {
+		for (int i=0; i<this.memberList.size(); i++) {
+			if (this.memberList.get(i).getUID() == mUID) {
+				db.RemoveMemberFile(memberList.get(i).getUID());
+				this.memberList.remove(i);
+			}
+		}
+	}
 	
 }
