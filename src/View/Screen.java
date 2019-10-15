@@ -40,4 +40,9 @@ public class Screen {
 	public void setName (String nameToSet) {
 		name = nameToSet;
 	}
+
+	public void addItemLine(String id, String item, String attr) {
+		text = text + id + " - " + item + " - " + attr + "\n";
+		
+	}
 }

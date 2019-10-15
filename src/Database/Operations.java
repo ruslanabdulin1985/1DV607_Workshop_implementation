@@ -7,14 +7,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import java.util.Scanner;
-
-import Model.Member;
-
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.lang.Object;
 
 
+// REPRESENTS A DATABASE
 
 public class Operations {
 	int nextUID = loadNextUID();
@@ -46,7 +42,6 @@ public class Operations {
 			writer.write(toFile);
 			writer.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -62,7 +57,6 @@ public class Operations {
 			data = sc.nextLine(); //take the data from file
 			sc.close();
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -85,7 +79,6 @@ public class Operations {
 			data = sc.nextLine(); //take the data from file
 			sc.close();
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -128,7 +121,6 @@ public class Operations {
 			writer.write(toFile);
 			writer.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		this.increaseNextUID();
@@ -137,12 +129,20 @@ public class Operations {
 	public void RemoveMemberFile(int mUID) {
 		File toDelete = new File(defaultPathMembers + String.valueOf(mUID) + ".mem");
 		try {
-			toDelete.delete();
-			System.out.print(toDelete.toString());
-		
+			toDelete.delete();		
 		}
 		catch (Exception e) {
-			System.out.print("can't delete " + e.getMessage()  );
+			e.printStackTrace();
+		}
+	}
+	
+	public void RemoveBoatFile (int bUID) {
+		File toDelete = new File(defaultPathBoats + String.valueOf(bUID) + ".boat");
+		try {
+			toDelete.delete();		
+		}
+		catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 	
@@ -151,13 +151,11 @@ public class Operations {
 		
 		try {
 			BufferedWriter writer;
-//			System.out.println(saveFile.getPath());
 			writer = new BufferedWriter(new FileWriter(saveFile.getPath()));
 			String toFile = boat[0] + "," + boat [1] + "," + boat[2] + "," + boat[3];
 			writer.write(toFile);
 			writer.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		increaseNextBID();
@@ -213,7 +211,6 @@ public class Operations {
 			data = sc.nextLine(); //take the data from file
 			sc.close();
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -230,15 +227,12 @@ public class Operations {
 		data = sc.nextLine(); //take the data from file
 		sc.close();
 	} catch (FileNotFoundException e) {
-		// TODO Auto-generated catch block
 		e.printStackTrace();
 	}
 	
 	String[] toReturn = data.split(",");
 	
 	return toReturn;
-	
-	
 	}
 
 	public String[][] getBoats() {

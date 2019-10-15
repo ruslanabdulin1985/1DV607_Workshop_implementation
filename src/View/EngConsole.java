@@ -1,6 +1,5 @@
 package View;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Scanner;
 
 import Model.Application;
@@ -21,7 +20,7 @@ public class EngConsole {
 	BIDbuffer = "";
 	}
 	
-	// main porcess - handles the flow of the console input-output
+	// main porccess - handles the flow of the console input-output
 	public void start() {
 		
 		String userInput;
@@ -37,7 +36,7 @@ public class EngConsole {
 				runningApp.exit();  // if input q than exit
 			}
 			// In main menu
-			if (runningApp.getStatus().equals("mainMenu")){
+			else if (runningApp.getStatus().equals("mainMenu")){
 				if (userInput.equals("1")) {
 					runningApp.setStatus("compactList");
 					this.compactList();
@@ -49,14 +48,17 @@ public class EngConsole {
 				}	
 				
 				else if (userInput.equals("3")) {
-					Runtime.getRuntime().exit(10);
+					runningApp.exit();
 				}	
 			}
 			
 			// In compact List menu
 			else if (runningApp.getStatus().equals("compactList")){
 				if (userInput.equals("v")) {
-					this.notImplemented();
+//					this.notImplemented();
+					this.verboseList();
+					runningApp.setStatus("verboseList");
+					
 				}
 				
 				else if (userInput.equals("b")){
@@ -77,12 +79,12 @@ public class EngConsole {
 				
 				else if (userInput.equals("a")) {
 					buffer.clear();
-					addMemberName();
+					addMemberName(); // add name to buffer
 					buffer.add(sc.nextLine());
-					addMemberPersonNumber();
+					addMemberPersonNumber(); // add person number to bufer
 					buffer.add(sc.nextLine());
 					String[] mem = {"null",buffer.get(0),buffer.get(1)};
-					runningApp.addMember(mem);
+					runningApp.addMember(mem); // add member using info from bufer
 					runningApp.setStatus("compactList");
 					this.compactList();
 					buffer.clear();  // 
@@ -91,23 +93,6 @@ public class EngConsole {
 				else  //something else provided - ask again 
 					this.compactList();
 			}
-			
-			// in Delete Member menu
-			else if (runningApp.getStatus().equals("removeMem")) {
-			
-				
-				String confirmation = sc.nextLine();
-				if (confirmation.equals("y")){
-					runningApp.deleteMember(Integer.valueOf(UIDbuffer));
-					runningApp.setStatus("compactList");
-				}
-					
-				else if( confirmation.equals("n")){
-					runningApp.setStatus("compactList");
-				}
-			}
-			
-			
 
 			
 			// in Member Detail
@@ -143,6 +128,8 @@ public class EngConsole {
 					buffer.clear();  // 
 					this.memberDetail(UIDbuffer);
 				}
+				
+				
 			}
 			
 			// In 
@@ -203,8 +190,18 @@ public class EngConsole {
 					this.boatList();
 				}
 				
-				else if (userInput.equals("d")) {
-					this.notImplemented();
+				else if (userInput.equals("d")){
+					this.confirmAction();
+					if (sc.nextLine().equals("y")) {
+						
+						runningApp.deleteBoat(Integer.valueOf(BIDbuffer));
+						this.boatList();
+						runningApp.setStatus("boatList");
+						}
+					else {
+						this.boatDetail(BIDbuffer);
+						runningApp.setStatus("boatDetail");}
+						
 				}
 				
 				else if (userInput.equals("e")) {
@@ -236,9 +233,37 @@ public class EngConsole {
 		
 		userInput = sc.nextLine();
 		System.out.println(userInput);
-		
+		sc.close();
 	}
 	
+	private void verboseList() {
+		Screen verboseList = new Screen("verbosetList");
+		verboseList.addTextLine(":::Verbose List of Members:::");
+		verboseList.addTextLine("");
+		
+		
+		ArrayList<String[]> members = (ArrayList<String[]>) runningApp.getMembersAsStringArrays().clone();
+//		ArrayList<String[]> boats = (ArrayList<String[]>) runningApp.getBoatsAsStringArrays().clone();
+		for (String[] member : members) 
+		{	verboseList.addTextLine("ID " + "- name -" + " personal number");
+			verboseList.addItemLine(member[0] , member[1], member[2]) ;
+			String[][] boatsOfmember = runningApp.getBoatsByUID(Integer.valueOf(member[0]));
+			verboseList.addTextLine(":BOATS:");
+			verboseList.addTextLine("\tID " + "- type -" + " length");
+			for (String[] boat : boatsOfmember) {
+				verboseList.addItemLine("\t"+boat[0], boat[1], boat[2]);
+			}
+			verboseList.addTextLine("");
+		}
+		verboseList.addTextLine("");
+
+		verboseList.addTextLine("a-Add, c-Compact, ID#-Detail, b-Back, q-Quit");
+		verboseList.addCommandLine();
+		System.out.print(verboseList.getText());
+
+		
+	}
+
 	private void exitApp() {
 		Screen exitApp = new Screen("exitApp");
 		exitApp.addTextLine("Application is closed");
@@ -251,6 +276,7 @@ public class EngConsole {
 		boatList.addTextLine("");
 		boatList.addTextLine("ID " + " type " + " length " + " owner ");
 		
+		@SuppressWarnings("unchecked")
 		ArrayList<String[]> boats = (ArrayList<String[]>) runningApp.getBoatsAsStringArrays().clone();
 		
 		for (String[] boat : boats) 
@@ -298,6 +324,7 @@ public class EngConsole {
 		System.out.print(addLength.getText());
 	}
 	
+	@SuppressWarnings("unchecked")
 	private void addBoatReg() {
 		Screen addReg = new Screen("addReg");
 		addReg.addTextLine(":::Register Boat:::");
@@ -400,14 +427,7 @@ public class EngConsole {
 		mainMenu.addCommandLine();
 		System.out.print(mainMenu.getText());	
 	}
-	
-	private void removeMember() {
-		Screen removeMem = new Screen("removeMem");
-		removeMem.addTextLine("Provide ID of the user to be romoved");
-		removeMem.addTextLine("");
-		removeMem.addCommandLine();
-		System.out.print(removeMem.getText());
-	}
+
 	
 	private void confirmAction() {
 		Screen confirm = new Screen ("confirm");

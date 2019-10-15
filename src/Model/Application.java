@@ -1,9 +1,7 @@
 package Model;
 
-import java.io.BufferedWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Map;
 
 public class Application {
 	ArrayList<Member> memberList; // List of Members
@@ -37,7 +35,7 @@ public class Application {
 			this.memberList.add(newMember);
 		}
 	}
-	
+	// take the data from database and put it in memory
 	private void fillBoatsList(String [][] boatsListArr) {
 		for (String[] boatarr : boatsListArr) {
 			System.out.print(Arrays.toString(boatsListArr));
@@ -46,7 +44,7 @@ public class Application {
 		}
 	}
 	
-	
+	// fill both member and boat lists
 	private void fillLists() {
 		this.fillMembersList(db.getMembers());
 		this.fillBoatsList(db.getBoats());
@@ -93,7 +91,7 @@ public class Application {
 		db.AddMemberFile(mbr.toArr());  // save changes to database
 	}
 	
-	// Array List represenatation of Member List
+	// Array List representation of Member List
 	public ArrayList<String[]>getMembersAsStringArrays(){
 		
 		ArrayList<String[]> toReturn = new ArrayList<String[]>();
@@ -134,7 +132,6 @@ public class Application {
 		return toReturn;
 	}
 	
-	
 	public Member getMemberById(int mid) {
 		Member toReturn = null;
 		for (Member member : memberList) {
@@ -152,7 +149,7 @@ public class Application {
 		}
 		return toReturn;
 	}
-		
+	
 	public String[] getBoatById(String id) {
 		String[] toReturn = null;
 		int BID = Integer.valueOf(id);
@@ -171,8 +168,27 @@ public class Application {
 	public void deleteMember(int mUID) {
 		for (int i=0; i<this.memberList.size(); i++) {
 			if (this.memberList.get(i).getUID() == mUID) {
+				// First Delete all the connected boats
+				ArrayList<Boat> boatsToDelete = new ArrayList<Boat>();
+				for(Boat b : this.boatList) {
+					if (b.getOwner().equals(memberList.get(i)))
+						boatsToDelete.add(boatList.get(i));
+				}
+				
+				for (Boat b: boatsToDelete)
+					deleteBoat(b.getBID());
+				// Second - remove the member
 				db.RemoveMemberFile(memberList.get(i).getUID());
 				this.memberList.remove(i);
+			}
+		}
+	}
+
+	public void deleteBoat(int bUID) {
+		for (int i=0; i<this.boatList.size(); i++) {
+			if (this.boatList.get(i).getBID() == bUID) {
+				db.RemoveBoatFile(boatList.get(i).getBID());  // remove file
+				this.boatList.remove(i); // Delete 
 			}
 		}
 	}
