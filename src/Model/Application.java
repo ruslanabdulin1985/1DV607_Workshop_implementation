@@ -8,13 +8,17 @@ public class Application {
 	ArrayList<Model.Boat> boatList;// List of Boats
 	Database.Operations db;// Connection to database
 	
-	public Application(Database.Operations db) {
+	public Application() {
 		
 		memberList = new ArrayList<Member>(); // List of Members
 		boatList = new ArrayList<Model.Boat>(); // List of Boats
+		
+//		status = "mainMenu"; // set default status
+	}
+	
+	public void connect(Database.Operations db) {
 		this.db = db; 
 		this.fillLists();  // download data from database
-//		status = "mainMenu"; // set default status
 	}
 	
 	// take the data from database and put it in memory
@@ -24,6 +28,7 @@ public class Application {
 			this.memberList.add(newMember);
 		}
 	}
+	
 	// take the data from database and put it in memory
 	private void fillBoatsList(String [][] boatsListArr) {
 		for (String[] boatarr : boatsListArr) {
@@ -39,10 +44,6 @@ public class Application {
 		this.fillBoatsList(db.getBoats());
 	}
 	
-	public ArrayList<Member> getMemberList(){
-		return memberList;
-	}
-	
 	// Add a boat to the list of boats
 	public void addBoat(String bType, int bLength, int mUID) {
 		int bUID = db.getNextBID();
@@ -51,7 +52,7 @@ public class Application {
 		db.AddBoatFile(bt.toArr()); //add to database
 	}
 	
-	//Change a Boat by Bot ID
+	//Change a Boat by Boat ID
 	public void changeBoat(String BID, String[] arr) {
 		arr[0] = BID;
 		Boat bt = new Boat(Integer.valueOf(arr[0]), arr[1], Integer.valueOf(arr[2]), getMemberById(Integer.valueOf(arr[3]) ));
@@ -121,7 +122,7 @@ public class Application {
 		return toReturn;
 	}
 	
-	public Member getMemberById(int mid) {
+	private Member getMemberById(int mid) {
 		Member toReturn = null;
 		for (Member member : memberList) {
 			if (member.getUID() == mid) 

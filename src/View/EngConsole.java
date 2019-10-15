@@ -7,18 +7,15 @@ import Model.Application;
 
 public class EngConsole {
 	
-//	Application runningApp; 
 	ArrayList <String> buffer;
 	String UIDbuffer;
 	String BIDbuffer;
-	
 	String status;
 	
 	
 	// default constructor
 	public EngConsole() {
 	status = "mainMenu";
-//	runningApp = new Application();
 	buffer = new ArrayList<String>(); 
 	UIDbuffer = "";
 	BIDbuffer = "";
@@ -71,10 +68,10 @@ public class EngConsole {
 				}
 				
 				else if(isDigit(userInput)) {
-					if (runningApp.getMemberById(Integer.valueOf(userInput)) == null)
+					if (runningApp.getMemberArrById(Integer.valueOf(userInput)) == null)
 						this.compactList(runningApp);
 					
-					else if (!(runningApp.getMemberById(Integer.valueOf(userInput))==null)) {
+					else if (!(runningApp.getMemberArrById(Integer.valueOf(userInput))==null)) {
 						this.setStatus("memberDetail");
 						UIDbuffer = userInput;
 						this.memberDetail(userInput, runningApp);
@@ -97,7 +94,14 @@ public class EngConsole {
 				else  //something else provided - ask again 
 					this.compactList(runningApp);
 			}
-
+			
+			// in VerboseList
+			else if (this.getStatus().equals("verboseList")){
+				if (userInput.equals("b")) {
+					this.compactList(runningApp);
+					this.setStatus("compactList");
+				}
+			}
 			
 			// in Member Detail
 			else if (this.getStatus().equals("memberDetail")){
@@ -156,7 +160,7 @@ public class EngConsole {
 						this.boatDetail(userInput, runningApp);
 					}
 				}
-				
+				//refactor!
 				else if (userInput.equals("a")) {
 					buffer.clear();
 					this.setStatus("addBoatType");
@@ -207,7 +211,7 @@ public class EngConsole {
 						this.setStatus("boatDetail");}
 						
 				}
-				
+				//refactor!
 				else if (userInput.equals("e")) {
 					buffer.clear();
 					addBoatType();
@@ -247,7 +251,6 @@ public class EngConsole {
 		
 		
 		ArrayList<String[]> members = (ArrayList<String[]>) runningApp.getMembersAsStringArrays().clone();
-//		ArrayList<String[]> boats = (ArrayList<String[]>) runningApp.getBoatsAsStringArrays().clone();
 		for (String[] member : members) 
 		{	verboseList.addTextLine("ID " + "- name -" + " personal number");
 			verboseList.addItemLine(member[0] , member[1], member[2]) ;
@@ -261,11 +264,9 @@ public class EngConsole {
 		}
 		verboseList.addTextLine("");
 
-		verboseList.addTextLine("a-Add, c-Compact, ID#-Detail, b-Back, q-Quit");
+		verboseList.addTextLine("b-Back, q-Quit");
 		verboseList.addCommandLine();
 		System.out.print(verboseList.getText());
-
-		
 	}
 
 	private void exitApp() {
@@ -314,6 +315,7 @@ public class EngConsole {
 		System.out.print(addLength.getText());
 	}
 	
+	//refactor!
 	private void addBoatType() {
 		Screen addLength = new Screen("addType");
 		addLength.addTextLine(":::Register Boat:::");
@@ -440,14 +442,6 @@ public class EngConsole {
 		confirm.addTextLine("y - Yes, n - No, q - Quit");
 		confirm.addCommandLine();
 		System.out.print(confirm.getText());
-	}
-	
-	
-	private void notImplemented() {
-		Screen ni = new Screen("ni");
-		ni.addTextLine(":::NOT YET IMPLEMENTED:::");
-		ni.addCommandLine();
-		System.out.print(ni.getText());
 	}
 	
 	private String getStatus() {
