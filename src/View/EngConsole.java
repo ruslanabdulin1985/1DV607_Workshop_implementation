@@ -164,7 +164,7 @@ public class EngConsole {
 				else if (userInput.equals("a")) {
 					buffer.clear();
 					this.setStatus("addBoatType");
-					addBoatType();
+					addBoatType(runningApp.getBoatTypes());
 					String typeID = sc.nextLine();
 					if (typeID.equals("1"))
 						buffer.add("Kayak/Canoe");
@@ -214,28 +214,29 @@ public class EngConsole {
 				//refactor!
 				else if (userInput.equals("e")) {
 					buffer.clear();
-					addBoatType();
-					String typeID = sc.nextLine();
-					if (typeID.equals("1"))
-						buffer.add("Kayak/Canoe");
-					else if (typeID.equals("2"))
-						buffer.add("Motorsailer");
-					else if (typeID.equals("3"))
-						buffer.add("Motorsailer");
-					else if (typeID.equals("4"))
-						buffer.add("Other");
-					else 
-						buffer.add("Not stated");
+					buffer.add(BIDbuffer);
+					String[] boatTypes = runningApp.getBoatTypes();
+					addBoatType(boatTypes);
+					String typeNum = sc.nextLine();
+					String type = "Not Stated";
+					for (int i = 0; i>boatTypes.length; i++) {
+						
+						System.out.println(typeNum); 
+						if (typeNum.equals(String.valueOf(i+1))) {
+							type = boatTypes[i];
+							break;
+						}
+					}
+					buffer.add(type);
 					addBoatLength();
 					buffer.add(sc.nextLine());
 					addBoatReg(runningApp);
 					buffer.add(sc.nextLine());
-					String[] bt = {"null",buffer.get(0),buffer.get(1),buffer.get(2)};
+					String[] bt = {buffer.get(0),buffer.get(1),buffer.get(2),buffer.get(3)};
 					runningApp.changeBoat(BIDbuffer, bt);
 					buffer.clear();  // 
 					boatDetail(BIDbuffer, runningApp);
 				}
-				
 			}
 	}
 		
@@ -315,20 +316,34 @@ public class EngConsole {
 		System.out.print(addLength.getText());
 	}
 	
-	//refactor!
-	private void addBoatType() {
+	public void addBoatType(String[] types) {
 		Screen addLength = new Screen("addType");
 		addLength.addTextLine(":::Register Boat:::");
 		addLength.addTextLine("");
-		addLength.addItemLine("1", "Kayak/Canoe");
-		addLength.addItemLine("2", "Motorsailer");
-		addLength.addItemLine("3", "Sailboat");
-		addLength.addItemLine("4", "Other");
+		for (int i=0; i<types.length; i++) {
+			addLength.addItemLine(String.valueOf(i+1), types[i]);
+		}
 		addLength.addTextLine("");
 		addLength.addTextLine("Enter type number :");
 		addLength.addCommandLine();
 		System.out.print(addLength.getText());
 	}
+	
+	
+	
+//	private void addBoatType() {
+//		Screen addLength = new Screen("addType");
+//		addLength.addTextLine(":::Register Boat:::");
+//		addLength.addTextLine("");
+//		addLength.addItemLine("1", "Kayak/Canoe");
+//		addLength.addItemLine("2", "Motorsailer");
+//		addLength.addItemLine("3", "Sailboat");
+//		addLength.addItemLine("4", "Other");
+//		addLength.addTextLine("");
+//		addLength.addTextLine("Enter type number :");
+//		addLength.addCommandLine();
+//		System.out.print(addLength.getText());
+//	}
 	
 	@SuppressWarnings("unchecked")
 	private void addBoatReg(Application runningApp) {

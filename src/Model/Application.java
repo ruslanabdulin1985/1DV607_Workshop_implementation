@@ -6,16 +6,16 @@ import java.util.Arrays;
 public class Application {
 	ArrayList<Member> memberList; // List of Members
 	ArrayList<Model.Boat> boatList;// List of Boats
+	String [] boatTypes; // types of boats
 	Database.Operations db;// Connection to database
 	
 	public Application() {
-		
 		memberList = new ArrayList<Member>(); // List of Members
 		boatList = new ArrayList<Model.Boat>(); // List of Boats
-		
-//		status = "mainMenu"; // set default status
+		boatTypes = new String[0];
 	}
 	
+
 	public void connect(Database.Operations db) {
 		this.db = db; 
 		this.fillLists();  // download data from database
@@ -37,11 +37,20 @@ public class Application {
 			this.boatList.add(bt);
 		}
 	}
+	// fill boat types
+	private void fillBoatTypes() {
+		this.boatTypes = Arrays.copyOf(boatTypes, 4);
+		this.boatTypes[0] = "Kayak/Canoe";
+		this.boatTypes[1] = "Motorsailer";
+		this.boatTypes[2] = "Sailboat";
+		this.boatTypes[3] = "Other";
+	}
 	
-	// fill both member and boat lists
+	// fill member list,boat list and boat types
 	private void fillLists() {
 		this.fillMembersList(db.getMembers());
 		this.fillBoatsList(db.getBoats());
+		fillBoatTypes();
 	}
 	
 	// Add a boat to the list of boats
@@ -52,9 +61,13 @@ public class Application {
 		db.AddBoatFile(bt.toArr()); //add to database
 	}
 	
+	public String[] getBoatTypes(){
+		return this.boatTypes;
+	}
+	
 	//Change a Boat by Boat ID
 	public void changeBoat(String BID, String[] arr) {
-		arr[0] = BID;
+		//arr[0] = BID;
 		Boat bt = new Boat(Integer.valueOf(arr[0]), arr[1], Integer.valueOf(arr[2]), getMemberById(Integer.valueOf(arr[3]) ));
 		for (int i=0; i<boatList.size(); i++)
 			if (Integer.valueOf(BID) == boatList.get(i).getBID())
