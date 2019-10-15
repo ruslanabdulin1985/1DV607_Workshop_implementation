@@ -7,28 +7,30 @@ import Model.Application;
 
 public class EngConsole {
 	
-	Application runningApp; 
+//	Application runningApp; 
 	ArrayList <String> buffer;
 	String UIDbuffer;
 	String BIDbuffer;
 	
+	
+	
 	// default constructor
 	public EngConsole() {
-	runningApp = new Application();
+//	runningApp = new Application();
 	buffer = new ArrayList<String>(); 
 	UIDbuffer = "";
 	BIDbuffer = "";
 	}
 	
 	// main porccess - handles the flow of the console input-output
-	public void start() {
+	public void start(Application runningApp) {
 		
 		String userInput;
 		Scanner sc = new Scanner(System.in);
 		this.mainMenu();
 		
 		//as long as status not exit:
-		while (!this.runningApp.getStatus().equals("exit")) {
+		while (!runningApp.getStatus().equals("exit")) {
 			userInput = sc.nextLine(); 
 			
 			if (userInput.equals("q")) {
@@ -39,12 +41,12 @@ public class EngConsole {
 			else if (runningApp.getStatus().equals("mainMenu")){
 				if (userInput.equals("1")) {
 					runningApp.setStatus("compactList");
-					this.compactList();
+					this.compactList(runningApp);
 				}	
 				
 				else if (userInput.equals("2")) {
 					runningApp.setStatus("boatList");
-					boatList();
+					boatList(runningApp);
 				}	
 				
 				else if (userInput.equals("3")) {
@@ -56,7 +58,7 @@ public class EngConsole {
 			else if (runningApp.getStatus().equals("compactList")){
 				if (userInput.equals("v")) {
 //					this.notImplemented();
-					this.verboseList();
+					this.verboseList(runningApp);
 					runningApp.setStatus("verboseList");
 					
 				}
@@ -68,12 +70,12 @@ public class EngConsole {
 				
 				else if(isDigit(userInput)) {
 					if (runningApp.getMemberById(Integer.valueOf(userInput)) == null)
-						this.compactList();
+						this.compactList(runningApp);
 					
 					else if (!(runningApp.getMemberById(Integer.valueOf(userInput))==null)) {
 						runningApp.setStatus("memberDetail");
 						UIDbuffer = userInput;
-						this.memberDetail(userInput);
+						this.memberDetail(userInput, runningApp);
 					}
 				}
 				
@@ -86,12 +88,12 @@ public class EngConsole {
 					String[] mem = {"null",buffer.get(0),buffer.get(1)};
 					runningApp.addMember(mem); // add member using info from bufer
 					runningApp.setStatus("compactList");
-					this.compactList();
+					this.compactList(runningApp);
 					buffer.clear();  // 
 				}
 				
 				else  //something else provided - ask again 
-					this.compactList();
+					this.compactList(runningApp);
 			}
 
 			
@@ -100,7 +102,7 @@ public class EngConsole {
 				if (userInput.equals("b")) {
 					System.out.println("back");
 					runningApp.setStatus("compactList");
-					this.compactList();
+					this.compactList(runningApp);
 				}
 				
 				else if (userInput.equals("d")){
@@ -108,11 +110,11 @@ public class EngConsole {
 					if (sc.nextLine().equals("y")) {
 						
 						runningApp.deleteMember(Integer.valueOf(UIDbuffer));
-						this.compactList();
+						this.compactList(runningApp);
 						runningApp.setStatus("compactList");
 						}
 					else {
-						this.memberDetail(UIDbuffer);
+						this.memberDetail(UIDbuffer, runningApp);
 						runningApp.setStatus("memberDetail");}
 						
 				}
@@ -126,7 +128,7 @@ public class EngConsole {
 					String[] mem = {"null",buffer.get(0),buffer.get(1)};
 					runningApp.changeMember(UIDbuffer, mem);
 					buffer.clear();  // 
-					this.memberDetail(UIDbuffer);
+					this.memberDetail(UIDbuffer, runningApp);
 				}
 				
 				
@@ -144,12 +146,12 @@ public class EngConsole {
 				
 				else if(isDigit(userInput)) {
 					if (runningApp.getBoatById(userInput) == null)
-						this.boatList();
+						this.boatList(runningApp);
 					
 					else if (!(runningApp.getBoatById(userInput)==null)) {
 						runningApp.setStatus("boatDetail");
 						BIDbuffer = userInput;
-						this.boatDetail(userInput);
+						this.boatDetail(userInput, runningApp);
 					}
 				}
 				
@@ -171,14 +173,14 @@ public class EngConsole {
 					
 					addBoatLength();
 					buffer.add(sc.nextLine());
-					addBoatReg();
+					addBoatReg(runningApp);
 					buffer.add(sc.nextLine());
 					
 					//String[] bt = {"null", buffer.get(0),buffer.get(1),buffer.get(2)};
 					runningApp.addBoat(buffer.get(0),Integer.valueOf(buffer.get(1)),Integer.valueOf(buffer.get(2)));
 					buffer.clear();  // 
 					runningApp.setStatus("boatList");
-					boatList();
+					boatList(runningApp);
 				}
 			}
 			
@@ -187,7 +189,7 @@ public class EngConsole {
 				if (userInput.equals("b")) {
 					System.out.println("back");
 					runningApp.setStatus("boatList");
-					this.boatList();
+					boatList(runningApp);
 				}
 				
 				else if (userInput.equals("d")){
@@ -195,11 +197,11 @@ public class EngConsole {
 					if (sc.nextLine().equals("y")) {
 						
 						runningApp.deleteBoat(Integer.valueOf(BIDbuffer));
-						this.boatList();
+						this.boatList(runningApp);
 						runningApp.setStatus("boatList");
 						}
 					else {
-						this.boatDetail(BIDbuffer);
+						this.boatDetail(BIDbuffer, runningApp);
 						runningApp.setStatus("boatDetail");}
 						
 				}
@@ -220,12 +222,12 @@ public class EngConsole {
 						buffer.add("Not stated");
 					addBoatLength();
 					buffer.add(sc.nextLine());
-					addBoatReg();
+					addBoatReg(runningApp);
 					buffer.add(sc.nextLine());
 					String[] bt = {"null",buffer.get(0),buffer.get(1),buffer.get(2)};
 					runningApp.changeBoat(BIDbuffer, bt);
 					buffer.clear();  // 
-					boatDetail(BIDbuffer);
+					boatDetail(BIDbuffer, runningApp);
 				}
 				
 			}
@@ -236,7 +238,7 @@ public class EngConsole {
 		sc.close();
 	}
 	
-	private void verboseList() {
+	private void verboseList(Application runningApp) {
 		Screen verboseList = new Screen("verbosetList");
 		verboseList.addTextLine(":::Verbose List of Members:::");
 		verboseList.addTextLine("");
@@ -270,7 +272,7 @@ public class EngConsole {
 		System.out.print(exitApp.getText());
 	}
 
-	private void boatList() {
+	private void boatList(Application runningApp) {
 		Screen boatList = new Screen("boatList");
 		boatList.addTextLine(":::List of Boats:::");
 		boatList.addTextLine("");
@@ -325,7 +327,7 @@ public class EngConsole {
 	}
 	
 	@SuppressWarnings("unchecked")
-	private void addBoatReg() {
+	private void addBoatReg(Application runningApp) {
 		Screen addReg = new Screen("addReg");
 		addReg.addTextLine(":::Register Boat:::");
 		addReg.addTextLine("");
@@ -354,7 +356,7 @@ public class EngConsole {
 	}
 	
 
-	private void memberDetail(String UID) {
+	private void memberDetail(String UID, Application runningApp) {
 		String [] member = runningApp.getMemberArrById(Integer.valueOf(UID));
 		Screen memDetail = new Screen("compactList");
 		memDetail.addTextLine(":::Member's Detail:::");
@@ -377,7 +379,7 @@ public class EngConsole {
 		System.out.print(memDetail.getText());	
 		}
 	
-	private void boatDetail(String BID) {
+	private void boatDetail(String BID, Application runningApp) {
 		String [] boat = runningApp.getBoatById(BID);
 		Screen memDetail = new Screen("boatList");
 		memDetail.addTextLine(":::Boats's Detail:::");
@@ -394,7 +396,7 @@ public class EngConsole {
 
 	
 	@SuppressWarnings("unchecked")
-	private void compactList() {
+	private void compactList(Application runningApp) {
 		Screen compactList = new Screen("compactList");
 		compactList.addTextLine(":::Compact List of Members:::");
 		compactList.addTextLine("");
