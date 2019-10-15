@@ -7,25 +7,14 @@ public class Application {
 	ArrayList<Member> memberList; // List of Members
 	ArrayList<Model.Boat> boatList;// List of Boats
 	Database.Operations db;// Connection to database
-	String status;  //current status
 	
-	public Application() {
+	public Application(Database.Operations db) {
 		
 		memberList = new ArrayList<Member>(); // List of Members
 		boatList = new ArrayList<Model.Boat>(); // List of Boats
-		db = new Database.Operations(); // Conection to database
-		
-		
+		this.db = db; 
 		this.fillLists();  // download data from database
-		status = "mainMenu"; // set default status
-	}
-	
-	public String getStatus() {
-		return status;
-	}
-	
-	public void setStatus(String stts) {
-		status = stts;
+//		status = "mainMenu"; // set default status
 	}
 	
 	// take the data from database and put it in memory

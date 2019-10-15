@@ -12,10 +12,12 @@ public class EngConsole {
 	String UIDbuffer;
 	String BIDbuffer;
 	
+	String status;
 	
 	
 	// default constructor
 	public EngConsole() {
+	status = "mainMenu";
 //	runningApp = new Application();
 	buffer = new ArrayList<String>(); 
 	UIDbuffer = "";
@@ -30,7 +32,7 @@ public class EngConsole {
 		this.mainMenu();
 		
 		//as long as status not exit:
-		while (!runningApp.getStatus().equals("exit")) {
+		while (!this.getStatus().equals("exit")) {
 			userInput = sc.nextLine(); 
 			
 			if (userInput.equals("q")) {
@@ -38,14 +40,14 @@ public class EngConsole {
 				runningApp.exit();  // if input q than exit
 			}
 			// In main menu
-			else if (runningApp.getStatus().equals("mainMenu")){
+			else if (this.getStatus().equals("mainMenu")){
 				if (userInput.equals("1")) {
-					runningApp.setStatus("compactList");
+					this.setStatus("compactList");
 					this.compactList(runningApp);
 				}	
 				
 				else if (userInput.equals("2")) {
-					runningApp.setStatus("boatList");
+					this.setStatus("boatList");
 					boatList(runningApp);
 				}	
 				
@@ -55,16 +57,16 @@ public class EngConsole {
 			}
 			
 			// In compact List menu
-			else if (runningApp.getStatus().equals("compactList")){
+			else if (this.getStatus().equals("compactList")){
 				if (userInput.equals("v")) {
 //					this.notImplemented();
 					this.verboseList(runningApp);
-					runningApp.setStatus("verboseList");
+					this.setStatus("verboseList");
 					
 				}
 				
 				else if (userInput.equals("b")){
-					runningApp.setStatus("mainMenu");
+					this.setStatus("mainMenu");
 					this.mainMenu();
 				}
 				
@@ -73,7 +75,7 @@ public class EngConsole {
 						this.compactList(runningApp);
 					
 					else if (!(runningApp.getMemberById(Integer.valueOf(userInput))==null)) {
-						runningApp.setStatus("memberDetail");
+						this.setStatus("memberDetail");
 						UIDbuffer = userInput;
 						this.memberDetail(userInput, runningApp);
 					}
@@ -87,7 +89,7 @@ public class EngConsole {
 					buffer.add(sc.nextLine());
 					String[] mem = {"null",buffer.get(0),buffer.get(1)};
 					runningApp.addMember(mem); // add member using info from bufer
-					runningApp.setStatus("compactList");
+					this.setStatus("compactList");
 					this.compactList(runningApp);
 					buffer.clear();  // 
 				}
@@ -98,10 +100,10 @@ public class EngConsole {
 
 			
 			// in Member Detail
-			else if (runningApp.getStatus().equals("memberDetail")){
+			else if (this.getStatus().equals("memberDetail")){
 				if (userInput.equals("b")) {
 					System.out.println("back");
-					runningApp.setStatus("compactList");
+					this.setStatus("compactList");
 					this.compactList(runningApp);
 				}
 				
@@ -111,11 +113,11 @@ public class EngConsole {
 						
 						runningApp.deleteMember(Integer.valueOf(UIDbuffer));
 						this.compactList(runningApp);
-						runningApp.setStatus("compactList");
+						this.setStatus("compactList");
 						}
 					else {
 						this.memberDetail(UIDbuffer, runningApp);
-						runningApp.setStatus("memberDetail");}
+						this.setStatus("memberDetail");}
 						
 				}
 				
@@ -137,10 +139,10 @@ public class EngConsole {
 			// In 
 			
 			// In Boat List
-			else if (runningApp.getStatus().equals("boatList")) {
+			else if (this.getStatus().equals("boatList")) {
 				if (userInput.equals("b")) {
 					System.out.println("back");
-					runningApp.setStatus("mainMenu");
+					this.setStatus("mainMenu");
 					this.mainMenu();
 				}
 				
@@ -149,7 +151,7 @@ public class EngConsole {
 						this.boatList(runningApp);
 					
 					else if (!(runningApp.getBoatById(userInput)==null)) {
-						runningApp.setStatus("boatDetail");
+						this.setStatus("boatDetail");
 						BIDbuffer = userInput;
 						this.boatDetail(userInput, runningApp);
 					}
@@ -157,7 +159,7 @@ public class EngConsole {
 				
 				else if (userInput.equals("a")) {
 					buffer.clear();
-					runningApp.setStatus("addBoatType");
+					this.setStatus("addBoatType");
 					addBoatType();
 					String typeID = sc.nextLine();
 					if (typeID.equals("1"))
@@ -179,16 +181,16 @@ public class EngConsole {
 					//String[] bt = {"null", buffer.get(0),buffer.get(1),buffer.get(2)};
 					runningApp.addBoat(buffer.get(0),Integer.valueOf(buffer.get(1)),Integer.valueOf(buffer.get(2)));
 					buffer.clear();  // 
-					runningApp.setStatus("boatList");
+					this.setStatus("boatList");
 					boatList(runningApp);
 				}
 			}
 			
 			//InBoatDetail
-			else if (runningApp.getStatus().equals("boatDetail")){
+			else if (this.getStatus().equals("boatDetail")){
 				if (userInput.equals("b")) {
 					System.out.println("back");
-					runningApp.setStatus("boatList");
+					this.setStatus("boatList");
 					boatList(runningApp);
 				}
 				
@@ -198,11 +200,11 @@ public class EngConsole {
 						
 						runningApp.deleteBoat(Integer.valueOf(BIDbuffer));
 						this.boatList(runningApp);
-						runningApp.setStatus("boatList");
+						this.setStatus("boatList");
 						}
 					else {
 						this.boatDetail(BIDbuffer, runningApp);
-						runningApp.setStatus("boatDetail");}
+						this.setStatus("boatDetail");}
 						
 				}
 				
@@ -446,6 +448,14 @@ public class EngConsole {
 		ni.addTextLine(":::NOT YET IMPLEMENTED:::");
 		ni.addCommandLine();
 		System.out.print(ni.getText());
+	}
+	
+	private String getStatus() {
+		return status;
+	}
+	
+	private void setStatus(String sts) {
+		status = sts;
 	}
 
 	private boolean isDigit(String str) {
