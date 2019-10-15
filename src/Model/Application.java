@@ -32,7 +32,6 @@ public class Application {
 	// take the data from database and put it in memory
 	private void fillBoatsList(String [][] boatsListArr) {
 		for (String[] boatarr : boatsListArr) {
-			System.out.print(Arrays.toString(boatsListArr));
 			Boat bt = new Boat(Integer.valueOf(boatarr[0]), boatarr[1], Integer.valueOf(boatarr[2]), getMemberById(Integer.valueOf(boatarr[3])));
 			this.boatList.add(bt);
 		}
@@ -54,11 +53,18 @@ public class Application {
 	}
 	
 	// Add a boat to the list of boats
-	public void addBoat(String bType, int bLength, int mUID) {
-		int bUID = db.getNextBID();
-		Model.Boat bt = new Boat(bUID, bType, bLength,  getMemberById(mUID));
-		boatList.add(bt);
-		db.AddBoatFile(bt.toArr()); //add to database
+	public boolean addBoat(String bType, int bLength, int mUID) {
+		boolean toReturn = false;
+		
+		if (getMemberById(mUID)!=null) {// if that null - don't create a boat
+			int bUID = db.getNextBID();
+			Model.Boat bt = new Boat(bUID, bType, bLength,  getMemberById(mUID));
+			boatList.add(bt);
+			db.AddBoatFile(bt.toArr()); //add to database
+			toReturn = true;
+		}
+		
+		return toReturn;
 	}
 	
 	public String[] getBoatTypes(){
@@ -110,8 +116,9 @@ public class Application {
 	public ArrayList<String[]>getBoatsAsStringArrays(){
 		
 		ArrayList<String[]> toReturn = new ArrayList<String[]>();
-		System.out.print(boatList.size());
+		
 		for (Model.Boat n : boatList) {
+			
 			String[] arr = {String.valueOf(n.getBID()), n.getType(), String.valueOf(n.getLength()), String.valueOf(n.getOwner().getUID())};
 			toReturn.add(arr);
 		}

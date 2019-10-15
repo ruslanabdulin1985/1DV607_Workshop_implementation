@@ -160,7 +160,6 @@ public class EngConsole {
 						this.boatDetail(userInput, runningApp);
 					}
 				}
-				//refactor!
 				else if (userInput.equals("a")) {
 					buffer.clear();
 					String[] boatTypes = runningApp.getBoatTypes();
@@ -168,23 +167,53 @@ public class EngConsole {
 					String typeNum = sc.nextLine();
 					String type = "Not Stated";
 					for (int i = 0; i<boatTypes.length; i++) {
-						System.out.println("TypeNum: " + typeNum); 
 						if (typeNum.equals(String.valueOf(i+1))) {
 							type = boatTypes[i];
 							break;
 						}
 					}
 					buffer.add(type);
-					addBoatLength();
-					buffer.add(sc.nextLine());
-					addBoatReg(runningApp);
-					buffer.add(sc.nextLine());
-//					String[] bt = {buffer.get(0), buffer.get(1), buffer.get(2)};
-					runningApp.addBoat(buffer.get(0), Integer.valueOf(buffer.get(1)),Integer.valueOf(buffer.get(2)));
-					buffer.clear();  // 
-					boatList(runningApp);
+					
+					boolean goFuther = false;
+					do  {
+					try {
+						addBoatLength();
+						userInput = sc.nextLine();
+						Integer.valueOf(userInput);
+						goFuther = true;
+					}
+					catch(Exception e){
+					}
+					}
+					while (!goFuther);
+					buffer.add(userInput);
+					
+					goFuther = false;
+					do {
+					
+					try {						
+						addBoatReg(runningApp);
+						userInput = sc.nextLine();
+						Integer.valueOf(userInput);
+						goFuther = true;
+					}
+					catch(Exception e){}
+					}
+					while (!goFuther);
+					buffer.add(userInput);
+					
+					if (runningApp.addBoat(buffer.get(0), Integer.valueOf(buffer.get(1)),Integer.valueOf(buffer.get(2))))
+						boatList(runningApp);	
+					else {
+						System.err.println("\t:::Error!:::");
+						System.err.println("Something went wrong. Possibly, there is no user you are trying to arrange. Try again");
+						boatList(runningApp);	
+					}
+						
+						buffer.clear();  
 				}
 			}
+
 			
 			//InBoatDetail
 			else if (this.getStatus().equals("boatDetail")){
@@ -224,10 +253,33 @@ public class EngConsole {
 						}
 					}
 					buffer.add(type);
-					addBoatLength();
-					buffer.add(sc.nextLine());
-					addBoatReg(runningApp);
-					buffer.add(sc.nextLine());
+					
+					boolean goFuther = false;
+					do {
+						try {
+							addBoatLength();
+							userInput = sc.nextLine();
+							Integer.valueOf(userInput);
+							goFuther = true;
+						}
+						catch(Exception e) {}
+						
+					}
+					while(!goFuther);
+					buffer.add(userInput);
+					goFuther = false;
+					do {
+						try {
+							addBoatReg(runningApp);
+							userInput = sc.nextLine();
+							Integer.valueOf(userInput);
+							goFuther = true;
+						}
+						catch(Exception e) {}
+						
+					}
+					while(!goFuther);
+					buffer.add(userInput);
 					String[] bt = {buffer.get(0),buffer.get(1),buffer.get(2),buffer.get(3)};
 					runningApp.changeBoat(BIDbuffer, bt);
 					buffer.clear();  // 
@@ -237,7 +289,6 @@ public class EngConsole {
 	}
 		
 		userInput = sc.nextLine();
-		System.out.println(userInput);
 		sc.close();
 	}
 	
@@ -246,10 +297,10 @@ public class EngConsole {
 		verboseList.addTextLine(":::Verbose List of Members:::");
 		verboseList.addTextLine("");
 		
-		
+		verboseList.addTextLine("ID " + "- name -" + " personal number");
 		ArrayList<String[]> members = (ArrayList<String[]>) runningApp.getMembersAsStringArrays().clone();
 		for (String[] member : members) 
-		{	verboseList.addTextLine("ID " + "- name -" + " personal number");
+		{	
 			verboseList.addItemLine(member[0] , member[1], member[2]) ;
 			String[][] boatsOfmember = runningApp.getBoatsByUID(Integer.valueOf(member[0]));
 			verboseList.addTextLine(":BOATS:");
@@ -326,27 +377,12 @@ public class EngConsole {
 	}
 	
 	
-	
-//	private void addBoatType() {
-//		Screen addLength = new Screen("addType");
-//		addLength.addTextLine(":::Register Boat:::");
-//		addLength.addTextLine("");
-//		addLength.addItemLine("1", "Kayak/Canoe");
-//		addLength.addItemLine("2", "Motorsailer");
-//		addLength.addItemLine("3", "Sailboat");
-//		addLength.addItemLine("4", "Other");
-//		addLength.addTextLine("");
-//		addLength.addTextLine("Enter type number :");
-//		addLength.addCommandLine();
-//		System.out.print(addLength.getText());
-//	}
-	
 	@SuppressWarnings("unchecked")
 	private void addBoatReg(Application runningApp) {
 		Screen addReg = new Screen("addReg");
 		addReg.addTextLine(":::Register Boat:::");
 		addReg.addTextLine("");
-		addReg.addTextLine("Choose an owner :");
+		addReg.addTextLine("Choose an owner and type his/her ID:");
 		addReg.addTextLine("");
 		ArrayList<String[]> members = (ArrayList<String[]>) runningApp.getMembersAsStringArrays().clone();
 		
