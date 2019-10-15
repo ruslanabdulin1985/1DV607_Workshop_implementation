@@ -163,29 +163,25 @@ public class EngConsole {
 				//refactor!
 				else if (userInput.equals("a")) {
 					buffer.clear();
-					this.setStatus("addBoatType");
-					addBoatType(runningApp.getBoatTypes());
-					String typeID = sc.nextLine();
-					if (typeID.equals("1"))
-						buffer.add("Kayak/Canoe");
-					else if (typeID.equals("2"))
-						buffer.add("Motorsailer");
-					else if (typeID.equals("3"))
-						buffer.add("Motorsailer");
-					else if (typeID.equals("4"))
-						buffer.add("Other");
-					else 
-						buffer.add("Not stated");
-					
+					String[] boatTypes = runningApp.getBoatTypes();
+					addBoatType(boatTypes);
+					String typeNum = sc.nextLine();
+					String type = "Not Stated";
+					for (int i = 0; i<boatTypes.length; i++) {
+						System.out.println("TypeNum: " + typeNum); 
+						if (typeNum.equals(String.valueOf(i+1))) {
+							type = boatTypes[i];
+							break;
+						}
+					}
+					buffer.add(type);
 					addBoatLength();
 					buffer.add(sc.nextLine());
 					addBoatReg(runningApp);
 					buffer.add(sc.nextLine());
-					
-					//String[] bt = {"null", buffer.get(0),buffer.get(1),buffer.get(2)};
-					runningApp.addBoat(buffer.get(0),Integer.valueOf(buffer.get(1)),Integer.valueOf(buffer.get(2)));
+//					String[] bt = {buffer.get(0), buffer.get(1), buffer.get(2)};
+					runningApp.addBoat(buffer.get(0), Integer.valueOf(buffer.get(1)),Integer.valueOf(buffer.get(2)));
 					buffer.clear();  // 
-					this.setStatus("boatList");
 					boatList(runningApp);
 				}
 			}
@@ -211,7 +207,7 @@ public class EngConsole {
 						this.setStatus("boatDetail");}
 						
 				}
-				//refactor!
+				
 				else if (userInput.equals("e")) {
 					buffer.clear();
 					buffer.add(BIDbuffer);
@@ -219,7 +215,7 @@ public class EngConsole {
 					addBoatType(boatTypes);
 					String typeNum = sc.nextLine();
 					String type = "Not Stated";
-					for (int i = 0; i>boatTypes.length; i++) {
+					for (int i = 0; i<boatTypes.length; i++) {
 						
 						System.out.println(typeNum); 
 						if (typeNum.equals(String.valueOf(i+1))) {

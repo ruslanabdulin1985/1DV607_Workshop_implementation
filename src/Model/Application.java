@@ -67,7 +67,6 @@ public class Application {
 	
 	//Change a Boat by Boat ID
 	public void changeBoat(String BID, String[] arr) {
-		//arr[0] = BID;
 		Boat bt = new Boat(Integer.valueOf(arr[0]), arr[1], Integer.valueOf(arr[2]), getMemberById(Integer.valueOf(arr[3]) ));
 		for (int i=0; i<boatList.size(); i++)
 			if (Integer.valueOf(BID) == boatList.get(i).getBID())
