@@ -1,4 +1,4 @@
-package Database;
+package Model;
 
 import java.io.BufferedWriter;
 import java.io.File;

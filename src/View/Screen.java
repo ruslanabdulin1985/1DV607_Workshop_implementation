@@ -4,7 +4,7 @@ public class Screen {
 	
 	private String name = "empty";
 	private String text = "\n";
-	int itemcounter = 0;
+	private int itemcounter = 0;
 	
 	public Screen(String nameToSet) {
 		name = nameToSet;

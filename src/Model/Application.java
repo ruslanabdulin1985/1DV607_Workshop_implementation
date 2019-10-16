@@ -4,22 +4,18 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Application {
-	ArrayList<Member> memberList; // List of Members
-	ArrayList<Model.Boat> boatList;// List of Boats
-	String [] boatTypes; // types of boats
-	Database.Operations db;// Connection to database
+	private ArrayList<Member> memberList; // List of Members
+	private ArrayList<Model.Boat> boatList;// List of Boats
+	private String [] boatTypes; // types of boats
+	private Operations db = new Model.Operations(); // Initializing a database
 	
 	public Application() {
+		boatTypes = new String[0];
 		memberList = new ArrayList<Member>(); // List of Members
 		boatList = new ArrayList<Model.Boat>(); // List of Boats
-		boatTypes = new String[0];
-	}
-	
-
-	public void connect(Database.Operations db) {
-		this.db = db; 
 		this.fillLists();  // download data from database
 	}
+	
 	
 	// take the data from database and put it in memory
 	private void fillMembersList(String [][] memberListArr) {
@@ -47,9 +43,9 @@ public class Application {
 	
 	// fill member list,boat list and boat types
 	private void fillLists() {
+		fillBoatTypes();
 		this.fillMembersList(db.getMembers());
 		this.fillBoatsList(db.getBoats());
-		fillBoatTypes();
 	}
 	
 	// Add a boat to the list of boats

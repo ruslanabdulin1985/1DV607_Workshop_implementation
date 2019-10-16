@@ -7,10 +7,10 @@ import Model.Application;
 
 public class EngConsole {
 	
-	ArrayList <String> buffer;
-	String UIDbuffer;
-	String BIDbuffer;
-	String status;
+	private ArrayList <String> buffer;
+	private String UIDbuffer;
+	private String BIDbuffer;
+	private String status;
 	
 	
 	// default constructor

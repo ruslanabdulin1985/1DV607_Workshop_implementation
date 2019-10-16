@@ -2,10 +2,10 @@ package Model;
 
 public class Boat{
 
-	String type;
-	int length;
-	int BID;
-	Member owner;
+	private String type;
+	private int length;
+	private int BID;
+	private Member owner;
 
 	public Boat() {
 	type = "";
