@@ -363,7 +363,7 @@ public class EngConsole {
 		System.out.print(addLength.getText());
 	}
 	
-	public void addBoatType(String[] types) {
+	private void addBoatType(String[] types) {
 		Screen addLength = new Screen("addType");
 		addLength.addTextLine(":::Register Boat:::");
 		addLength.addTextLine("");

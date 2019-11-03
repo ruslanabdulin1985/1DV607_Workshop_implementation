@@ -13,12 +13,12 @@ import java.util.Arrays;
 // REPRESENTS A DATABASE
 
 public class Operations {
-	int nextUID = loadNextUID();
-	int nextBID = loadNextBID();
+	private int nextUID = loadNextUID();
+	private int nextBID = loadNextBID();
 	
-	String defaultPathMembers = "db/members/";
+	private String defaultPathMembers = "db/members/";
 	
-	String defaultPathBoats = "db/boats/";
+	private String defaultPathBoats = "db/boats/";
 	
 	public int getNextUID() {
 		return nextUID;

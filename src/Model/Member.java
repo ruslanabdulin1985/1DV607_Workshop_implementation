@@ -39,13 +39,6 @@ public class Member{
 		return UID;
 	}
 	
-	public String toString() {
-		String toReturn = "/n";
-		toReturn = toReturn + "UID: " + String.valueOf(UID) + "\n";
-		toReturn = toReturn + "name: " + name + "\n";
-		toReturn = toReturn + "personal number: " + personalNumber + "\n";		
-		return name;
-	}
 	
 	public String[] toArr() {
 		String [] arr = {String.valueOf(UID), name, personalNumber};

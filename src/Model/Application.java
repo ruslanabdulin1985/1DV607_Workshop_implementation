@@ -8,9 +8,14 @@ public class Application {
 	private ArrayList<Model.Boat> boatList;// List of Boats
 	private String [] boatTypes; // types of boats
 	private Operations db = new Model.Operations(); // Initializing a database
+
+	
+	public enum boatTypes{
+		
+	}
 	
 	public Application() {
-		boatTypes = new String[0];
+		
 		memberList = new ArrayList<Member>(); // List of Members
 		boatList = new ArrayList<Model.Boat>(); // List of Boats
 		this.fillLists();  // download data from database
