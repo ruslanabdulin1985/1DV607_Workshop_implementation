@@ -7,7 +7,7 @@ public class Application {
 	private ArrayList<Member> memberList; // List of Members
 	private ArrayList<Model.Boat> boatList;// List of Boats
 	private String [] boatTypes; // types of boats
-	private Operations db = new Model.Operations(); // Initializing a database
+	private Registry db = new Model.Registry(); // Initializing a database
 
 	
 	public enum boatTypes{
