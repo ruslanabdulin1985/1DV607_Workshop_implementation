@@ -39,7 +39,6 @@ public class Application {
 			this.boatList.add(b);
 		}
 	}
-	// fill boat types
 	
 	
 	// fill member list,boat list and boat types

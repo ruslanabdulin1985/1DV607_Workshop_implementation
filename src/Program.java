@@ -1,15 +1,19 @@
 
 
+import Controller.User;
 import Model.Application;
 import View.EngConsole;
+import View.EngConsole2;
 
 public class Program {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 		Application app = new Application(); // Initializing a application
-		EngConsole con = new EngConsole(); // Start console
-		con.start(app); // start the application in console
+		EngConsole2 con = new EngConsole2(); // Start console
+		User cntr = new User();
+		while(true) {
+			con.start(cntr); // start the application in console
+		}
 	}
 
 }
