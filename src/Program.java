@@ -2,7 +2,6 @@
 
 import Controller.User;
 import Model.Application;
-import View.EngConsole;
 import View.EngConsole2;
 
 public class Program {
@@ -12,7 +11,7 @@ public class Program {
 		EngConsole2 con = new EngConsole2(); // Start console
 		User cntr = new User();
 		while(true) {
-			con.start(cntr); // start the application in console
+			cntr.run(app, con); // start the application in console
 		}
 	}
 

@@ -6,35 +6,25 @@ import Controller.User;
 
 public class EngConsole2 {
 	
-	private ConsoleStatuses status;
 	
 	public EngConsole2() {
-		status = ConsoleStatuses.start;
+		
 		
 	}
 	
-	public void start(User cntr) {
-		String userInput;
+	public String getInput() {
+		
 		Scanner sc = new Scanner(System.in);
-		
-		if (status == ConsoleStatuses.start) {
-			showGreetingMessage();
-			status = ConsoleStatuses.main;
-		}
-		
-		if (status == ConsoleStatuses.main) {
-			showMainScreen();
-			userInput = sc.nextLine();
-				if (userInput.equals("1"))
-					cntr.memberList();
-				if (userInput.equals("2"))
-					cntr.boatList();
-		}
+		String Input = sc.nextLine();
+		return Input;
+	}
+	
+	public boolean wantsCompactList(String input) {
+		return (input.equals("1"));
 	}
 	
 	
-	
-	private void showMainScreen() {
+	public void showMainScreen() {
 		//main menu
 				Screen mainMenu = new Screen("mainMenu");
 				mainMenu.addTextLine(":::Main Menu:::");
@@ -48,7 +38,7 @@ public class EngConsole2 {
 				System.out.print(mainMenu.getText());
 	}
 
-	private boolean showGreetingMessage() {
+	public boolean showGreetingMessage() {
 		System.out.println("\tJolly Bay Administration");
 		System.out.println("\tversion 2.0");
 		System.out.println("");
