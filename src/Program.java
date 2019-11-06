@@ -1,7 +1,6 @@
 
 
 import Model.Application;
-import Model.Operations;
 import View.EngConsole;
 
 public class Program {

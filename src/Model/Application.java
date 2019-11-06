@@ -1,18 +1,12 @@
 package Model;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class Application {
 	private ArrayList<Member> memberList; // List of Members
 	private ArrayList<Model.Boat> boatList;// List of Boats
-	private String [] boatTypes; // types of boats
 	private Registry db = new Model.Registry(); // Initializing a database
 
-	
-	public enum boatTypes{
-		
-	}
 	
 	public Application() {
 		
@@ -21,37 +15,40 @@ public class Application {
 		this.fillLists();  // download data from database
 	}
 	
+	public String[] getBoatTypes() {
+		
+		String[] toReturn = new String[0]; 
+		for (BoatTypes.boatTypes type : BoatTypes.boatTypes.values()) { 
+			toReturn = new String[toReturn.length + 1];
+			type.toString();
+		}
+		return toReturn;
+	}
+	
 	
 	// take the data from database and put it in memory
-	private void fillMembersList(String [][] memberListArr) {
-		for (String[] memarr : memberListArr) {
-			Member newMember = new Member(Integer.valueOf(memarr[0]), memarr[1], memarr[2]);
-			this.memberList.add(newMember);
+	private void fillMembersList(Member[] memberArr) {
+		for (Member m : memberArr) {
+			this.memberList.add(m);
 		}
 	}
 	
 	// take the data from database and put it in memory
-	private void fillBoatsList(String [][] boatsListArr) {
-		for (String[] boatarr : boatsListArr) {
-			Boat bt = new Boat(Integer.valueOf(boatarr[0]), boatarr[1], Integer.valueOf(boatarr[2]), getMemberById(Integer.valueOf(boatarr[3])));
-			this.boatList.add(bt);
+	private void fillBoatsList(Boat[] boatsArr) {
+		for (Boat b : boatsArr) {
+			this.boatList.add(b);
 		}
 	}
 	// fill boat types
-	private void fillBoatTypes() {
-		this.boatTypes = Arrays.copyOf(boatTypes, 4);
-		this.boatTypes[0] = "Kayak/Canoe";
-		this.boatTypes[1] = "Motorsailer";
-		this.boatTypes[2] = "Sailboat";
-		this.boatTypes[3] = "Other";
-	}
+	
 	
 	// fill member list,boat list and boat types
 	private void fillLists() {
-		fillBoatTypes();
 		this.fillMembersList(db.getMembers());
 		this.fillBoatsList(db.getBoats());
 	}
+	
+	
 	
 	// Add a boat to the list of boats
 	public boolean addBoat(String bType, int bLength, int mUID) {
@@ -61,16 +58,13 @@ public class Application {
 			int bUID = db.getNextBID();
 			Model.Boat bt = new Boat(bUID, bType, bLength,  getMemberById(mUID));
 			boatList.add(bt);
-			db.AddBoatFile(bt.toArr()); //add to database
+			db.AddBoatFile(bt); //add to database
 			toReturn = true;
 		}
 		
 		return toReturn;
 	}
 	
-	public String[] getBoatTypes(){
-		return this.boatTypes;
-	}
 	
 	//Change a Boat by Boat ID
 	public void changeBoat(String BID, String[] arr) {
@@ -78,7 +72,7 @@ public class Application {
 		for (int i=0; i<boatList.size(); i++)
 			if (Integer.valueOf(BID) == boatList.get(i).getBID())
 				boatList.set(i, bt);
-		db.AddBoatFile(bt.toArr()); // save changes to database
+		db.AddBoatFile(bt); // save changes to database
 	}
 	
 	//Add a member to the list of member
@@ -86,7 +80,7 @@ public class Application {
 		arr[0] = String.valueOf(db.getNextUID());
 		Member mbr = new Member(Integer.valueOf(arr[0]), arr[1], arr[2]);
 		memberList.add(mbr);
-		db.AddMemberFile(mbr.toArr()); //add to database
+		db.AddMemberFile(mbr); //add to database
 	}
 	
 	//Change a member by ID
@@ -97,7 +91,7 @@ public class Application {
 		for (int i=0; i<memberList.size(); i++)
 			if (Integer.valueOf(UID) == memberList.get(i).getUID())
 				memberList.set(i, mbr);
-		db.AddMemberFile(mbr.toArr());  // save changes to database
+		db.AddMemberFile(mbr);  // save changes to database
 	}
 	
 	// Array List representation of Member List
@@ -188,7 +182,7 @@ public class Application {
 				for (Boat b: boatsToDelete)
 					deleteBoat(b.getBID());
 				// Second - remove the member
-				db.RemoveMemberFile(memberList.get(i).getUID());
+				db.RemoveMemberFile(memberList.get(i));
 				this.memberList.remove(i);
 			}
 		}
@@ -197,7 +191,7 @@ public class Application {
 	public void deleteBoat(int bUID) {
 		for (int i=0; i<this.boatList.size(); i++) {
 			if (this.boatList.get(i).getBID() == bUID) {
-				db.RemoveBoatFile(boatList.get(i).getBID());  // remove file
+				db.RemoveBoatFile(boatList.get(i));  // remove file
 				this.boatList.remove(i); // Delete 
 			}
 		}
