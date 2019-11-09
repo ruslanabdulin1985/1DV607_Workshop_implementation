@@ -3,6 +3,8 @@ package View;
 import java.util.Scanner;
 
 import Controller.User;
+import Model.Member;
+import Model.MemberList;
 
 public class EngConsole2 {
 	
@@ -22,6 +24,8 @@ public class EngConsole2 {
 	public boolean wantsCompactList(String input) {
 		return (input.equals("1"));
 	}
+	
+
 	
 	
 	public void showMainScreen() {
@@ -51,4 +55,30 @@ public class EngConsole2 {
 		return true;
 	}
 	
+	public boolean showCompactList(MemberList<Member> mbrList) {
+		Screen sc = new Screen("Member Compact List");
+		sc.addTextLine("\t::: Member List Compact :::");
+		sc.addTextLine("");
+		sc.addTextLine("id  -  name  -  personal numeber");
+		for (Member m : mbrList) {
+			sc.addItemLine(String.valueOf(m.getUID()), m.getName(), m.getPersonalNumber());
+		}
+		sc.addTextLine("");
+		sc.addTextLine("e-Edit, d-Delete, b-Back, q-Quit");
+		System.out.print(sc.getText());
+		return true;
+	}
+
+	public boolean wantsToQuit(String userInput) {
+		return userInput.equals("q");
+	}
+
+	public void showMemDetail(String userInput) {
+		System.out.println("Mem Detail ZAGLUSHKA");
+	}
+
+	public boolean wantsBoatList(String userInput) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }

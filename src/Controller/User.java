@@ -19,41 +19,43 @@ public class User {
 	private Statuses status;
 
 	
-	Application runningApp;
+//	Application runningApp;
 	public User() {
 		status = Statuses.start;
 		
 	}
-	
-	public void takeInput() {
-		
-		String[] buffer = new String[0];
-		
-	}
 
 	
-
-	public void boatList() {
-		// TODO Auto-generated method stub
-		System.out.println("BtList:");
-		
-	}
 	public void run(Application app, EngConsole2 con) {
 		// TODO Auto-generated method stub
-		
+		String userInput = "";
 		
 		if (status == Statuses.start) {
 			con.showGreetingMessage();
+			con.showMainScreen();
 			status = Statuses.main;
 		}
 		
-		else if (status == Statuses.main) {
-			con.showMainScreen();
-			if (con.wantsCompactList(con.getInput())) {
+		userInput = con.getInput();
+		
+		if (status == Statuses.main) {
+			if (con.wantsCompactList(userInput)) {
 				status = Statuses.compactMemberList;
-//				con.showCompactList(Members[]);
+				con.showCompactList(app.getMemberList());
 			}
+			else if (con.wantsBoatList(userInput)) {
 				
+			}
+		}
+		
+		else if (status == Statuses.compactMemberList ) {
+			
+			con.showMemDetail(userInput);
+				
+		}
+		
+		if (con.wantsToQuit(userInput)) {
+			app.exit();
 		}
 		
 		
