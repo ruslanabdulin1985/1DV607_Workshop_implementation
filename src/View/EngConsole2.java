@@ -25,9 +25,6 @@ public class EngConsole2 {
 		return (input.equals("1"));
 	}
 	
-
-	
-	
 	public void showMainScreen() {
 		//main menu
 				Screen mainMenu = new Screen("mainMenu");
@@ -55,7 +52,7 @@ public class EngConsole2 {
 		return true;
 	}
 	
-	public boolean showCompactList(MemberList<Member> mbrList) {
+	public boolean showCompactList(MemberList mbrList) {
 		Screen sc = new Screen("Member Compact List");
 		sc.addTextLine("\t::: Member List Compact :::");
 		sc.addTextLine("");
@@ -73,12 +70,26 @@ public class EngConsole2 {
 		return userInput.equals("q");
 	}
 
-	public void showMemDetail(String userInput) {
-		System.out.println("Mem Detail ZAGLUSHKA");
+	public void showMemDetail(Member mbr) {
+		Screen sc = new Screen("showMemDetail");
+		sc.addTextLine("\t:::Member's Detail:::");
+		sc.addTextLine("");
+		sc.addTextLine("id  -  name  -  person number");
+		sc.addItemLine(String.valueOf(mbr.getUID()), mbr.getName(), mbr.getPersonalNumber());
+		sc.addTextLine("\tAttached boats:");
+		sc.addTextLine("\tid  -  type  -  size");
+		sc.addCommandLine();
+		System.out.println(sc.getText());
 	}
 
 	public boolean wantsBoatList(String userInput) {
-		// TODO Auto-generated method stub
+		if (userInput.equals("2")) {
+			return true;
+		}
 		return false;
+	}
+
+	public void showGoodbyeMessage() {
+		System.out.println("Application closed");
 	}
 }

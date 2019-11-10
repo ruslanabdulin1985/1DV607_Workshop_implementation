@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import Model.Application;
+import Model.Member;
 import View.EngConsole2;
 
 public class User {
@@ -13,7 +14,7 @@ public class User {
 		exit,
 		main,
 		start,
-		compactMemberList,
+		compactMemberList, boatList, verboseMemberList, memDetail,
 	}
 	
 	private Statuses status;
@@ -44,17 +45,21 @@ public class User {
 				con.showCompactList(app.getMemberList());
 			}
 			else if (con.wantsBoatList(userInput)) {
-				
+				status = Statuses.boatList;
 			}
 		}
 		
-		else if (status == Statuses.compactMemberList ) {
+		else if ((status == Statuses.compactMemberList) || (status == Statuses.verboseMemberList)) {
+			if (userInput.matches("\\d+")) {
+				Member mbr = app.getMemberList().getMemberById(Integer.valueOf(userInput));
+				con.showMemDetail(mbr);
+				status = Statuses.memDetail;
+			}
 			
-			con.showMemDetail(userInput);
-				
 		}
 		
 		if (con.wantsToQuit(userInput)) {
+			con.showGoodbyeMessage();
 			app.exit();
 		}
 		

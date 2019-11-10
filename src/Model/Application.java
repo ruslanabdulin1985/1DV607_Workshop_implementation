@@ -4,19 +4,19 @@ import java.util.ArrayList;
 
 public class Application {
 	//private ArrayList<Member> memberList; // List of Members
-	private MemberList<Member> memberList;
+	private MemberList memberList;
 	private ArrayList<Model.Boat> boatList;// List of Boats
 	private Registry db = new Model.Registry(); // Initializing a database
 
 	
 	public Application() {
 		
-		memberList = new MemberList<Member>(); // List of Members
+		memberList = new MemberList(); // List of Members
 		boatList = new ArrayList<Model.Boat>(); // List of Boats
 		this.fillLists();  // download data from database
 	}
 	
-	public MemberList<Member> getMemberList() {
+	public MemberList getMemberList() {
 		return this.memberList;
 	}
 	
