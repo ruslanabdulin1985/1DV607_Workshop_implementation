@@ -26,85 +26,67 @@ public class User {
 		
 	}
 
+	private void start(EngConsole2 con) {
+		con.showGreetingMessage();
+		con.showMainScreen();
+		status = Statuses.main;
+	}
+	
+	private void MainMenu(Application app, EngConsole2 con, String userInput) {
+		if (con.wantsCompactList(userInput)) {
+			status = Statuses.compactMemberList;
+			con.showCompactList(app.getMemberList());
+		}
+		else if (con.wantsBoatList(userInput)) {
+			status = Statuses.boatList;
+			con.showBoatList(app.getBoaList());
+		}
+	}
 	
 	public void run(Application app, EngConsole2 con) {
-		// TODO Auto-generated method stub
 		String userInput = "";
 		
 		if (status == Statuses.start) {
-			con.showGreetingMessage();
-			con.showMainScreen();
-			status = Statuses.main;
+			this.start(con);
 		}
 		
 		userInput = con.getInput();
 		
 		if (status == Statuses.main) {
-			if (con.wantsCompactList(userInput)) {
-				status = Statuses.compactMemberList;
-				con.showCompactList(app.getMemberList());
-			}
-			else if (con.wantsBoatList(userInput)) {
-				status = Statuses.boatList;
-				con.showBoatList(app.getBoaList());
-				System.out.println("PrintBoats");
-			}
+			MainMenu(app, con, userInput);
 		}
 		
 		else if (status == Statuses.boatList) {
-			if (con.userInputIsAnumber(userInput)) {
-				Boat bt = app.getBoaList().getBoatById(Integer.valueOf(userInput));
-				if(bt!=null) {
-					tmpID = Integer.valueOf(userInput);
-					con.showBoatDetail(bt);
-					status = Statuses.boatDetail;
-				}
-				else
-					con.showBoatDoesNoetExistError(userInput);
-				
-			}
-			else if(con.wantsToAdd(userInput)) {
-				BufferMemberInfo buffer = new BufferMemberInfo(con);
-				app.addMember(buffer.getName(), buffer.getPersonNum());
-				status = Statuses.compactMemberList;
-				con.showCompactList(app.getMemberList());
-			}
-
+			goIntoBoatDetail(app, con, userInput);
 		}
 		
 		else if ((status == Statuses.compactMemberList) || (status == Statuses.verboseMemberList)) {
-			if (con.userInputIsAnumber(userInput)) {
-				Member mbr = app.getMemberList().getMemberById(Integer.valueOf(userInput));
-				if(mbr!=null) {
-					tmpID = Integer.valueOf(userInput);
-					con.showMemDetail(mbr);
-					status = Statuses.memDetail;
-				}
-				else
-					con.showMemberDoesNoetExistError(userInput);
-				
-			}
-			else if(con.wantsToAdd(userInput)) {
-				BufferMemberInfo buffer = new BufferMemberInfo(con);
-				app.addMember(buffer.getName(), buffer.getPersonNum());
-				status = Statuses.compactMemberList;
-				con.showCompactList(app.getMemberList());
-			}
-			
+			goIntoMemberDetail(app, con, userInput);
 		}
 		
 		else if (status == Statuses.memDetail) {
-			if (con.wantsToDelete(userInput)) {
-				con.askforAprrove();
-				if (con.doesUserAprrove(con.getInput())) {
-					app.deleteMember(tmpID);
-					status = Statuses.compactMemberList;
-					con.showCompactList(app.getMemberList());
-				}
-				
-				else
-					status = Statuses.compactMemberList;
-					con.showCompactList(app.getMemberList());
+			actionsAgainstMember(app, con, userInput);
+		}
+			
+						
+		
+		
+		
+		if (con.wantsToQuit(userInput)) {
+			con.showGoodbyeMessage();
+			app.exit();
+		}
+		
+		
+	}
+	
+	private void actionsAgainstMember(Application app, EngConsole2 con, String userInput) {
+		if (con.wantsToDelete(userInput)) {
+			con.askforAprrove();
+			if (con.doesUserAprrove(con.getInput())) {
+				app.deleteMember(tmpID);
+				status = Statuses.compactMemberList;
+				con.showCompactList(app.getMemberList());
 			}
 			
 			else if (con.wantsToEdit(userInput)) {
@@ -118,30 +100,57 @@ public class User {
 				status = Statuses.compactMemberList;
 				con.showCompactList(app.getMemberList());
 			}
-			
-		
 		}
-		
-		
-		
-		if (con.wantsToQuit(userInput)) {
-			con.showGoodbyeMessage();
-			app.exit();
-		}
-		
-		
 	}
-	
+
+	private void goIntoMemberDetail(Application app, EngConsole2 con, String userInput) {
+		if (con.userInputIsAnumber(userInput)) {
+			Member mbr = app.getMemberList().getMemberById(Integer.valueOf(userInput));
+			if(mbr!=null) {
+				tmpID = Integer.valueOf(userInput);
+				con.showMemDetail(mbr);
+				status = Statuses.memDetail;
+			}
+			else
+				con.showMemberDoesNoetExistError(userInput);
+			
+		}
+		else if(con.wantsToAdd(userInput)) {
+			BufferMemberInfo buffer = new BufferMemberInfo(con);
+			app.addMember(buffer.getName(), buffer.getPersonNum());
+			status = Statuses.compactMemberList;
+			con.showCompactList(app.getMemberList());
+		}	
+	}
+
+	private void goIntoBoatDetail(Application app, EngConsole2 con, String userInput) {
+		if (con.userInputIsAnumber(userInput)) {
+			Boat bt = app.getBoaList().getBoatById(Integer.valueOf(userInput));
+			if(bt!=null) {
+				tmpID = Integer.valueOf(userInput);
+				con.showBoatDetail(bt);
+				status = Statuses.boatDetail;
+			}
+			else
+				con.showBoatDoesNoetExistError(userInput);
+			
+		}
+		else if(con.wantsToAdd(userInput)) {
+			BufferMemberInfo buffer = new BufferMemberInfo(con);
+			app.addMember(buffer.getName(), buffer.getPersonNum());
+			status = Statuses.compactMemberList;
+			con.showCompactList(app.getMemberList());
+		}
+	}
+
 	// INNER CLASS TO STORE BUFFER BOAT DATA
 	private class BufferBoatInfo{
 		String type;
-		String length;
-		
+		String length;	
 		public BufferBoatInfo(EngConsole2 con){
 			
 		}
 	}
-	
 	
 	// INNTER CLASS TO STORE BUFFER MEMBER DATA
 	private class BufferMemberInfo{
@@ -163,9 +172,5 @@ public class User {
 			return this.personNum;
 		}
 	}
-
-
+	
 }
-
-
-

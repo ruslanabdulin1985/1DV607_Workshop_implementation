@@ -165,7 +165,7 @@ public class EngConsole2 {
 
 	public void showBoatList(BoatList boaList) {
 		Screen sc = new Screen("Boat List");
-		sc.addTextLine("\t::: Boat List :::");
+		sc.addTextLine("\t::: Boatr List Compact :::");
 		sc.addTextLine("");
 		sc.addTextLine("id  -  type  -  length");
 		for (Boat b : boaList) {
