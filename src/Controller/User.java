@@ -7,8 +7,9 @@ import View.EngConsole2;
 
 public class User {
 	
+	Action act;
 	
-	private enum Statuses {
+	 public enum Statuses {
 		exit,
 		main,
 		start, bufferCollect,
@@ -23,54 +24,35 @@ public class User {
 //	Application runningApp;
 	public User() {
 		status = Statuses.start;
-		
-	}
-
-	private void start(EngConsole2 con) {
-		con.showGreetingMessage();
-		con.showMainScreen();
-		status = Statuses.main;
+		act = new Action();
 	}
 	
-	private void MainMenu(Application app, EngConsole2 con, String userInput) {
-		if (con.wantsCompactList(userInput)) {
-			status = Statuses.compactMemberList;
-			con.showCompactList(app.getMemberList());
-		}
-		else if (con.wantsBoatList(userInput)) {
-			status = Statuses.boatList;
-			con.showBoatList(app.getBoaList());
-		}
-	}
 	
 	public void run(Application app, EngConsole2 con) {
 		String userInput = "";
 		
 		if (status == Statuses.start) {
-			this.start(con);
+			this.status = act.start(con);
 		}
 		
 		userInput = con.getInput();
 		
 		if (status == Statuses.main) {
-			MainMenu(app, con, userInput);
+			this.status = act.MainMenu(app, con, userInput);
 		}
 		
 		else if (status == Statuses.boatList) {
-			goIntoBoatDetail(app, con, userInput);
+			this.status = act.goIntoBoatDetail(app, con, userInput);
 		}
 		
 		else if ((status == Statuses.compactMemberList) || (status == Statuses.verboseMemberList)) {
-			goIntoMemberDetail(app, con, userInput);
+			this.status = act.goIntoMemberDetail(app, con, userInput);
 		}
 		
 		else if (status == Statuses.memDetail) {
-			actionsAgainstMember(app, con, userInput);
+			this.status = act.actionsAgainstMember(app, con, userInput);
 		}
 			
-						
-		
-		
 		
 		if (con.wantsToQuit(userInput)) {
 			con.showGoodbyeMessage();
@@ -79,98 +61,6 @@ public class User {
 		
 		
 	}
-	
-	private void actionsAgainstMember(Application app, EngConsole2 con, String userInput) {
-		if (con.wantsToDelete(userInput)) {
-			con.askforAprrove();
-			if (con.doesUserAprrove(con.getInput())) {
-				app.deleteMember(tmpID);
-				status = Statuses.compactMemberList;
-				con.showCompactList(app.getMemberList());
-			}
-			
-			else if (con.wantsToEdit(userInput)) {
-				BufferMemberInfo buffer = new BufferMemberInfo(con);
-				app.editMember(tmpID, buffer.getName(), buffer.getPersonNum());
-				status = Statuses.compactMemberList;
-				con.showCompactList(app.getMemberList());
-			}
-			
-			else if (con.wantsGoBack(userInput)) {
-				status = Statuses.compactMemberList;
-				con.showCompactList(app.getMemberList());
-			}
-		}
-	}
 
-	private void goIntoMemberDetail(Application app, EngConsole2 con, String userInput) {
-		if (con.userInputIsAnumber(userInput)) {
-			Member mbr = app.getMemberList().getMemberById(Integer.valueOf(userInput));
-			if(mbr!=null) {
-				tmpID = Integer.valueOf(userInput);
-				con.showMemDetail(mbr);
-				status = Statuses.memDetail;
-			}
-			else
-				con.showMemberDoesNoetExistError(userInput);
-			
-		}
-		else if(con.wantsToAdd(userInput)) {
-			BufferMemberInfo buffer = new BufferMemberInfo(con);
-			app.addMember(buffer.getName(), buffer.getPersonNum());
-			status = Statuses.compactMemberList;
-			con.showCompactList(app.getMemberList());
-		}	
-	}
-
-	private void goIntoBoatDetail(Application app, EngConsole2 con, String userInput) {
-		if (con.userInputIsAnumber(userInput)) {
-			Boat bt = app.getBoaList().getBoatById(Integer.valueOf(userInput));
-			if(bt!=null) {
-				tmpID = Integer.valueOf(userInput);
-				con.showBoatDetail(bt);
-				status = Statuses.boatDetail;
-			}
-			else
-				con.showBoatDoesNoetExistError(userInput);
-			
-		}
-		else if(con.wantsToAdd(userInput)) {
-			BufferMemberInfo buffer = new BufferMemberInfo(con);
-			app.addMember(buffer.getName(), buffer.getPersonNum());
-			status = Statuses.compactMemberList;
-			con.showCompactList(app.getMemberList());
-		}
-	}
-
-	// INNER CLASS TO STORE BUFFER BOAT DATA
-	private class BufferBoatInfo{
-		String type;
-		String length;	
-		public BufferBoatInfo(EngConsole2 con){
-			
-		}
-	}
-	
-	// INNTER CLASS TO STORE BUFFER MEMBER DATA
-	private class BufferMemberInfo{
-		String name;
-		String personNum;
-		
-		private BufferMemberInfo(EngConsole2 con){
-			con.askForMemberName();
-			this.name =  con.getInput();
-			con.askForMemberPersonNum();
-			this.personNum = con.getInput();
-		}
-		
-		private String getName() {
-			return this.name;
-		}
-		
-		private String getPersonNum() {
-			return this.personNum;
-		}
-	}
 	
 }
