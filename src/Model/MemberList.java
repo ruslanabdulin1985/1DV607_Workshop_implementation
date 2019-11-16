@@ -37,12 +37,19 @@ public class MemberList implements Iterable<Member> {
 		return null;
 	}
 	
+	public void delete(Member m) {
+		this.members.remove(m);
+	}
+	
+//	public void delete(int UID) {
+//		for (Member m : this.members)
+//			if (m.getUID()==UID)
+//				this.members.remove(m);
+//	}
+	
 	public void edit(Member oldM, Member newM) {
-		for (int i=0; i<this.size(); i++) {
-			if (oldM.equals(this.get(i))) {
-				this.set(i, newM);
-			}
-		}
+		this.members.remove(oldM);
+		this.members.add(newM);
 	}
 
 	@Override

@@ -20,15 +20,15 @@ public class Application {
 		return this.memberList;
 	}
 	
-	public String[] getBoatTypes() {
-		
-		String[] toReturn = new String[0]; 
-		for (BoatTypes.boatTypes type : BoatTypes.boatTypes.values()) { 
-			toReturn = new String[toReturn.length + 1];
-			type.toString();
-		}
-		return toReturn;
-	}
+//	public String[] getBoatTypes() {
+//		
+//		String[] toReturn = new String[0]; 
+//		for (BoatTypes.boatTypes type : BoatTypes.boatTypes.values()) { 
+//			toReturn = new String[toReturn.length + 1];
+//			type.toString();
+//		}
+//		return toReturn;
+//	}
 	
 	
 	// take the data from database and put it in memory
@@ -80,27 +80,11 @@ public class Application {
 //	}
 	
 	//Add a member to the list of member
-	public void addMember(String[] arr) {
-		arr[0] = String.valueOf(db.getNextUID());
-		Member mbr = new Member(Integer.valueOf(arr[0]), arr[1], arr[2]);
+	public void addMember(String name, String personNumber) {
+		Member mbr = new Member(db.getNextUID(), name, personNumber);
 		memberList.add(mbr);
 		db.AddMemberFile(mbr); //add to database
 	}
-	
-	//db.AddMemberFile(mbr);  // save changes to database
-	
-	// Array List representation of Member List
-//	public ArrayList<String[]>getMembersAsStringArrays(){
-//		
-//		ArrayList<String[]> toReturn = new ArrayList<String[]>();
-//		
-//		for (Member n : memberList) {
-//			String[] arr = {String.valueOf(n.getUID()), n.getName(), n.getPersonalNumber()};
-//			toReturn.add(arr);
-//		}
-//		
-//		return toReturn;
-//	}
 	
 	// Array List representation of Boats
 	public ArrayList<String[]>getBoatsAsStringArrays(){
@@ -164,24 +148,13 @@ public class Application {
 		Runtime.getRuntime().exit(10);
 	}
 	
-//	public void deleteMember(int mUID) {
-//		for (int i=0; i<this.memberList.size(); i++) {
-//			if (this.memberList.get(i).getUID() == mUID) {
-//				// First Delete all the connected boats
-//				ArrayList<Boat> boatsToDelete = new ArrayList<Boat>();
-//				for(Boat b : this.boatList) {
-//					if (b.getOwner().equals(memberList.get(i)))
-//						boatsToDelete.add(boatList.get(i));
-//				}
-//				
-//				for (Boat b: boatsToDelete)
-//					deleteBoat(b.getBID());
-//				// Second - remove the member
-//				db.RemoveMemberFile(memberList.get(i));
-//				this.memberList.remove(i);
-//			}
-//		}
-//	}
+	public void deleteMember(int mUID) {
+//		boatsToDelete.add(boatList.get(i));
+// deleteBoat(b.getBID());
+		Member mem = this.memberList.getMemberById(mUID);
+		db.RemoveMemberFile(mem);
+		this.memberList.delete(mem);
+	}
 
 	public void deleteBoat(int bUID) {
 		for (int i=0; i<this.boatList.size(); i++) {
@@ -190,6 +163,13 @@ public class Application {
 				this.boatList.remove(i); // Delete 
 			}
 		}
+	}
+
+	public void editMember(int tmpID, String name, String personNum) {
+		Member oldMem = this.memberList.getMemberById(tmpID);
+		Member newMem = new Member(tmpID, name, personNum);
+		this.memberList.edit(oldMem, newMem);
+		db.AddMemberFile(newMem);	
 	}
 	
 }

@@ -7,8 +7,8 @@ import Model.Member;
 import Model.MemberList;
 
 public class EngConsole2 {
-	
-	
+
+
 	public EngConsole2() {
 		
 		
@@ -61,13 +61,17 @@ public class EngConsole2 {
 			sc.addItemLine(String.valueOf(m.getUID()), m.getName(), m.getPersonalNumber());
 		}
 		sc.addTextLine("");
-		sc.addTextLine("e-Edit, d-Delete, b-Back, q-Quit");
+		sc.addTextLine("#id-Detail, a-Add, b-Back, q-Quit");
 		System.out.print(sc.getText());
 		return true;
 	}
 
 	public boolean wantsToQuit(String userInput) {
 		return userInput.equals("q");
+	}
+	
+	public void showMemberDoesNoetExistError(String UID) {
+		System.err.println("Error occured: Member " + UID + " does not exist");
 	}
 
 	public void showMemDetail(Member mbr) {
@@ -78,9 +82,13 @@ public class EngConsole2 {
 		sc.addItemLine(String.valueOf(mbr.getUID()), mbr.getName(), mbr.getPersonalNumber());
 		sc.addTextLine("\tAttached boats:");
 		sc.addTextLine("\tid  -  type  -  size");
+		sc.addTextLine("e-Edit, d-Delete, b-Back, q-Quit");
+		sc.addTextLine("");
 		sc.addCommandLine();
 		System.out.println(sc.getText());
+		
 	}
+	
 
 	public boolean wantsBoatList(String userInput) {
 		if (userInput.equals("2")) {
@@ -92,4 +100,46 @@ public class EngConsole2 {
 	public void showGoodbyeMessage() {
 		System.out.println("Application closed");
 	}
+	
+	
+	
+	public boolean userInputIsAnumber(String input){
+		return input.matches("\\d+");
+	}
+	
+	public boolean wantsToEdit(String userInput) {
+		return (userInput.equals("e"));
+	}
+	
+	public boolean wantsToAdd(String userInput) {
+		return (userInput.equals("a"));
+	}
+
+	public boolean wantsToDelete(String userInput) {
+		return (userInput.equals("d"));
+	}
+
+	public void askForMemberName() {
+		System.out.println("Provide Member Name:");
+		
+	}
+
+	public void askForMemberPersonNum() {
+		System.out.println("Provide Member Personal Number:");
+		
+	}
+
+	public void askforAprrove() {
+		System.out.println("Are you sure ? y-Yes, any other-No");
+	}
+
+	public boolean doesUserAprrove(String input) {
+		return input.equals("y");
+	}
+
+	public boolean wantsGoBack(String input) {
+		return input.equals("b");
+	}
+
+	
 }
