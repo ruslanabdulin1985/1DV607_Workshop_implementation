@@ -3,6 +3,8 @@ package View;
 import java.util.Scanner;
 
 import Controller.User;
+import Model.Boat;
+import Model.BoatList;
 import Model.Member;
 import Model.MemberList;
 
@@ -139,6 +141,39 @@ public class EngConsole2 {
 
 	public boolean wantsGoBack(String input) {
 		return input.equals("b");
+	}
+
+	public void showBoatDetail(Boat bt) {
+		Screen sc = new Screen("showBoatDetail");
+		sc.addTextLine("\t:::Boat's Detail:::");
+		sc.addTextLine("");
+		sc.addTextLine("id  -  type  -  length");
+		sc.addItemLine(String.valueOf(bt.getBID()), bt.getType(), String.valueOf(bt.getLength()));
+		sc.addTextLine("\tOwner:");
+		sc.addTextLine("\tid  -  type  -  size");
+		sc.addTextLine("");
+		sc.addTextLine("e-Edit, d-Delete, b-Back, q-Quit");
+		sc.addTextLine("");
+		sc.addCommandLine();
+		System.out.println(sc.getText());
+	}
+
+	public void showBoatDoesNoetExistError(String userInput) {
+		System.err.println("Boat " +  userInput + " does not exist");
+		
+	}
+
+	public void showBoatList(BoatList boaList) {
+		Screen sc = new Screen("Boat List");
+		sc.addTextLine("\t::: Boat List :::");
+		sc.addTextLine("");
+		sc.addTextLine("id  -  type  -  length");
+		for (Boat b : boaList) {
+			sc.addItemLine(String.valueOf(b.getBID()), b.getType(), String.valueOf(b.getLength()));
+		}
+		sc.addTextLine("");
+		sc.addTextLine("#id-Detail, a-Add, b-Back, q-Quit");
+		System.out.print(sc.getText());
 	}
 
 	

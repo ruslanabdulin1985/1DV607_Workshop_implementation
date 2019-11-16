@@ -155,11 +155,10 @@ public class Registry{
 		return toReturn;
 	}
 	
-	public Member[] getMembers() {
-		Member[] toReturn = new Member[0];
+	public MemberList getMembers() {
+		MemberList toReturn = new MemberList();
 		for (String filename : getMemFiles()) {
-			toReturn = Arrays.copyOf(toReturn, toReturn.length + 1);
-			toReturn[toReturn.length - 1] = readMemberFile(filename);
+			toReturn.add(readMemberFile(filename));
 		}
 		return toReturn;
 	}
@@ -202,11 +201,10 @@ public class Registry{
 		return toReturn;
 		}
 	
-	public Boat[] getBoats() {
-		Boat[] toReturn = new Boat[0];
+	public BoatList getBoats() {
+		BoatList toReturn = new BoatList();
 		for (String filename : getBoatFiles()) {
-			toReturn = Arrays.copyOf(toReturn, toReturn.length + 1);
-			toReturn[toReturn.length - 1] = readBoatFile(filename);
+			toReturn.add(readBoatFile(filename));
 		}
 		return toReturn;
 	}

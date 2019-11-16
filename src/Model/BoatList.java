@@ -30,8 +30,8 @@ public class BoatList implements Iterable<Boat> {
 		return null;
 	}
 	
-	public void delete(Member m) {
-		this.boats.remove(m);
+	public void delete(Boat b) {
+		this.boats.remove(b);
 	}
 	
 	
@@ -44,7 +44,7 @@ public class BoatList implements Iterable<Boat> {
 	public Iterator<Boat>  iterator() {
 		return this.boats.iterator();
 	}
-
+	
 }
 
 	

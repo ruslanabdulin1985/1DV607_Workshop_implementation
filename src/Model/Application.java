@@ -3,21 +3,23 @@ package Model;
 import java.util.ArrayList;
 
 public class Application {
-	//private ArrayList<Member> memberList; // List of Members
-	private MemberList memberList;
-	private ArrayList<Model.Boat> boatList;// List of Boats
+
+	private MemberList memberList; // List of Members
+	private BoatList boatList;// List of Boats
 	private Registry db = new Model.Registry(); // Initializing a database
 
 	
 	public Application() {
-		
-		memberList = new MemberList(); // List of Members
-		boatList = new ArrayList<Model.Boat>(); // List of Boats
-		this.fillLists();  // download data from database
-	}
+		this.memberList = db.getMembers();
+		this.boatList=db.getBoats();
+		}
 	
 	public MemberList getMemberList() {
 		return this.memberList;
+	}
+	
+	public BoatList getBoaList() {
+		return this.boatList;
 	}
 	
 //	public String[] getBoatTypes() {
@@ -29,30 +31,7 @@ public class Application {
 //		}
 //		return toReturn;
 //	}
-	
-	
-	// take the data from database and put it in memory
-	private void fillMembersList(Member[] memberArr) {
-		for (Member m : memberArr) {
-			this.memberList.add(m);
-		}
-	}
-	
-	// take the data from database and put it in memory
-	private void fillBoatsList(Boat[] boatsArr) {
-		for (Boat b : boatsArr) {
-			this.boatList.add(b);
-		}
-	}
-	
-	
-	// fill member list,boat list and boat types
-	private void fillLists() {
-		this.fillMembersList(db.getMembers());
-		this.fillBoatsList(db.getBoats());
-	}
-	
-	
+		
 	
 	// Add a boat to the list of boats
 //	public boolean addBoat(String bType, int bLength, int mUID) {
@@ -157,12 +136,9 @@ public class Application {
 	}
 
 	public void deleteBoat(int bUID) {
-		for (int i=0; i<this.boatList.size(); i++) {
-			if (this.boatList.get(i).getBID() == bUID) {
-				db.RemoveBoatFile(boatList.get(i));  // remove file
-				this.boatList.remove(i); // Delete 
-			}
-		}
+		Boat bt = this.boatList.getBoatById(bUID);
+		this.boatList.delete(bt);
+		
 	}
 
 	public void editMember(int tmpID, String name, String personNum) {
@@ -171,5 +147,4 @@ public class Application {
 		this.memberList.edit(oldMem, newMem);
 		db.AddMemberFile(newMem);	
 	}
-	
 }
