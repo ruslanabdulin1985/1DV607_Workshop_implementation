@@ -1,8 +1,5 @@
 package Controller;
 
-import java.util.ArrayList;
-import java.util.Scanner;
-
 import Model.Application;
 import Model.Member;
 import View.EngConsole2;
@@ -65,8 +62,6 @@ public class User {
 			}
 			else if(con.wantsToAdd(userInput)) {
 				BufferMemberInfo buffer = new BufferMemberInfo(con);
-				
-				System.out.println(buffer.getName() + " " + buffer.getPersonNum());
 				app.addMember(buffer.getName(), buffer.getPersonNum());
 				status = Statuses.compactMemberList;
 				con.showCompactList(app.getMemberList());
@@ -111,7 +106,7 @@ public class User {
 		
 	}
 	
-
+	// INNTER CLASS TO STORE BUFFER DATA
 	private class BufferMemberInfo{
 		String name;
 		String personNum;

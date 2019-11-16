@@ -11,18 +11,7 @@ public class MemberList implements Iterable<Member> {
 		members = new ArrayList<Member>();
 	}
 	
-	public int size() {
-		return this.size();
-	}
-	
-	public boolean set(int pos, Member element) {
-		return this.set(pos, element);
-	}
-	
-	public Member get(int pos) {
-		return (Member)this.get(pos);
-	}
-	
+
 	public boolean add(Member m) {
 		this.members.add(m);
 		return true;
