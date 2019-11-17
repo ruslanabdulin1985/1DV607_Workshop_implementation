@@ -1,10 +1,13 @@
 package View;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 
 import Controller.User;
 import Model.Boat;
 import Model.BoatList;
+import Model.BoatTypes.boatTypes;
 import Model.Member;
 import Model.MemberList;
 
@@ -54,6 +57,20 @@ public class EngConsole2 {
 		return true;
 	}
 	
+	public boolean showChooseMemberList(MemberList mbrList) {
+		Screen sc = new Screen("Choose Member List");
+		sc.addTextLine("\t::: Choose a member :::");
+		sc.addTextLine("");
+		sc.addTextLine("id  -  name  -  personal numeber");
+		for (Member m : mbrList) {
+			sc.addItemLine(String.valueOf(m.getUID()), m.getName(), m.getPersonalNumber());
+		}
+		sc.addTextLine("");
+		System.out.print(sc.getText());
+		return true;
+	}
+	
+	
 	public boolean showCompactList(MemberList mbrList) {
 		Screen sc = new Screen("Member Compact List");
 		sc.addTextLine("\t::: Member List Compact :::");
@@ -64,6 +81,7 @@ public class EngConsole2 {
 		}
 		sc.addTextLine("");
 		sc.addTextLine("#id-Detail, a-Add, b-Back, q-Quit");
+		sc.addCommandLine();
 		System.out.print(sc.getText());
 		return true;
 	}
@@ -74,6 +92,7 @@ public class EngConsole2 {
 	
 	public void showMemberDoesNoetExistError(String UID) {
 		System.err.println("Error occured: Member " + UID + " does not exist");
+		System.out.println(">>>");
 	}
 
 	public void showMemDetail(Member mbr) {
@@ -123,16 +142,17 @@ public class EngConsole2 {
 
 	public void askForMemberName() {
 		System.out.println("Provide Member Name:");
-		
+		System.out.println(">>>");
 	}
 
 	public void askForMemberPersonNum() {
 		System.out.println("Provide Member Personal Number:");
-		
+		System.out.println(">>>");
 	}
 
 	public void askforAprrove() {
 		System.out.println("Are you sure ? y-Yes, any other-No");
+		System.out.println(">>>");
 	}
 
 	public boolean doesUserAprrove(String input) {
@@ -148,7 +168,7 @@ public class EngConsole2 {
 		sc.addTextLine("\t:::Boat's Detail:::");
 		sc.addTextLine("");
 		sc.addTextLine("id  -  type  -  length");
-		sc.addItemLine(String.valueOf(bt.getBID()), bt.getType(), String.valueOf(bt.getLength()));
+		sc.addItemLine(String.valueOf(bt.getBID()), String.valueOf(bt.getType()), String.valueOf(bt.getLength()));
 		sc.addTextLine("\tOwner:");
 		sc.addTextLine("\tid  -  type  -  size");
 		sc.addTextLine("");
@@ -160,37 +180,68 @@ public class EngConsole2 {
 
 	public void showBoatDoesNoetExistError(String userInput) {
 		System.err.println("Boat " +  userInput + " does not exist");
+		System.out.println(">>>");
 		
 	}
 
 	public void showBoatList(BoatList boaList) {
 		Screen sc = new Screen("Boat List");
-		sc.addTextLine("\t::: Boatr List Compact :::");
+		sc.addTextLine("\t::: Boats List :::");
 		sc.addTextLine("");
 		sc.addTextLine("id  -  type  -  length");
 		for (Boat b : boaList) {
-			sc.addItemLine(String.valueOf(b.getBID()), b.getType(), String.valueOf(b.getLength()));
+			sc.addItemLine(String.valueOf(b.getBID()), String.valueOf(b.getType()), String.valueOf(b.getLength()));
 		}
 		sc.addTextLine("");
 		sc.addTextLine("#id-Detail, a-Add, b-Back, q-Quit");
+		sc.addCommandLine();
 		System.out.print(sc.getText());
 	}
 
 	public void askForBoatType() {
-		System.out.println("Enter boat type");
-		
+		System.out.println("Enter boat type number: \n");
+		int i = 0;
+		for (boatTypes bt : boatTypes.values()) {
+				System.out.println(i + " " + bt);
+				i++;
+		}
+		System.out.println(">>>");
 	}
 
 	public void askForBoatLength() {
 		System.out.println("Enter boat length");
+		System.out.println(">>>");
 	}
 
 	public void askForBoatOwnerID() {
 		System.out.println("Enter boat owner's ID");
+		System.out.println(">>>");
 	}
 
 	public void showWrongLengthError() {
 		System.err.println("length doesn't seem to be a number");
+		System.out.println(">>>");
+	}
+
+	public String getInputBoatType() {        
+        
+		Scanner sc = new Scanner(System.in);
+		String Input = sc.nextLine();
+		// make sure that user provides a number
+		while (!userInputIsAnumber(Input)) {
+			System.err.println("ERROR! Provide a number");
+			Input = sc.nextLine();
+		}
+		
+		String toReturn = "";
+		int i = 0;
+		for (boatTypes bt : boatTypes.values()) {
+			if (Integer.valueOf(Input) == i) {
+				toReturn = String.valueOf(bt);
+			}
+			i++;
+		}
+		return toReturn;
 	}
 	
 }

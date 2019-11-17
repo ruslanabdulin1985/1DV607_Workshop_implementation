@@ -2,30 +2,24 @@ package Model;
 
 public class Boat{
 
-	private String type;
+	private BoatTypes.boatTypes type;
 	private int length;
 	private int BID;
 	private Member owner;
 
-	public Boat() {
-	type = "";
-	length =0;
-	BID = 0;
-	owner = new Member();
-	}
 	
-	public Boat(int bBID, String bType, int bLength, Member m) {
+	public Boat(int bBID, BoatTypes.boatTypes btype, int bLength, Member m) {
 		BID = bBID;
-		type = bType;
+		type = btype;
 		length = bLength;
 		owner = m;
 	}
 	
-	public String getType() {
+	public BoatTypes.boatTypes getType() {
 		return type;
 	}
 
-	public void setType(String typeToBeSet) {
+	public void setType(BoatTypes.boatTypes typeToBeSet) {
 		type = typeToBeSet;
 	}
 
@@ -34,7 +28,7 @@ public class Boat{
 	}
 	
 	public String[] toArr() {
-		String [] toReturn = {String.valueOf(BID), type, String.valueOf(length), String.valueOf(owner.getUID())};
+		String [] toReturn = {String.valueOf(BID), String.valueOf(type), String.valueOf(length), String.valueOf(owner.getUID())};
 		return toReturn;
 	}
 

@@ -2,6 +2,8 @@ package Model;
 
 import java.util.ArrayList;
 
+import Model.BoatTypes.boatTypes;
+
 public class Application {
 
 	private MemberList memberList; // List of Members
@@ -34,7 +36,7 @@ public class Application {
 		
 	
 //	 Add a boat to the list of boats
-	public void addBoat(String bType, int bLength, Member m) {	
+	public void addBoat(BoatTypes.boatTypes bType, int bLength, Member m) {	
 		int bUID = db.getNextBID();
 		Model.Boat bt = new Boat(bUID, bType, bLength,  m);
 		boatList.add(bt);
@@ -65,7 +67,7 @@ public class Application {
 		
 		for (Model.Boat n : boatList) {
 			
-			String[] arr = {String.valueOf(n.getBID()), n.getType(), String.valueOf(n.getLength()), String.valueOf(n.getOwner().getUID())};
+			String[] arr = {String.valueOf(n.getBID()), String.valueOf(n.getType()), String.valueOf(n.getLength()), String.valueOf(n.getOwner().getUID())};
 			toReturn.add(arr);
 		}
 		
@@ -86,23 +88,6 @@ public class Application {
 //		
 //		return toReturn;
 //	}
-	
-//	private Member getMemberById(int mid) {
-//		Member toReturn = null;
-//		for (Member member : memberList) {
-//			if (member.getUID() == mid) 
-//				return member;
-//		}
-//		return toReturn;
-//	}
-	
-//	public String[] getMemberArrById(int mid) {
-//		String[] toReturn = null;
-//		for (Member member : memberList) {
-//			if (member.getUID() == mid) 
-//				return member.toArr();
-//		}
-//		return toReturn;
 //	}
 	
 	public String[] getBoatById(String id) {
@@ -121,8 +106,6 @@ public class Application {
 	}
 	
 	public void deleteMember(int mUID) {
-//		boatsToDelete.add(boatList.get(i));
-// deleteBoat(b.getBID());
 		Member mem = this.memberList.getMemberById(mUID);
 		db.RemoveMemberFile(mem);
 		this.memberList.delete(mem);
@@ -131,7 +114,6 @@ public class Application {
 	public void deleteBoat(int bUID) {
 		Boat bt = this.boatList.getBoatById(bUID);
 		this.boatList.delete(bt);
-		
 	}
 
 	public void editMember(int tmpID, String name, String personNum) {
@@ -141,12 +123,10 @@ public class Application {
 		db.AddMemberFile(newMem);	
 	}
 	
-	public void editBoat(int tmpID, String type, int length) {
+	public void editBoat(int tmpID, boatTypes type, int length, Member m) {
 		Boat oldBoat = this.boatList.getBoatById(tmpID);
-//		Boat newBoat = new Boat(tmpID, type, length);
-//		this.memberList.edit(oldMem, newMem);
-//		db.AddMemberFile(newMem);	
-	}
-	
-	
+		Boat newBoat = new Boat(tmpID, type, length,  m);
+		this.boatList.edit(oldBoat, newBoat);
+		db.AddBoatFile(newBoat);	
+	}	
 }

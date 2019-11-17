@@ -182,7 +182,7 @@ public class Registry{
 		File file = new File("db/boats/"+filename);
 		
 		String[] strBoat = readFile("db/boats/", filename);
-		Boat toReturn = new Boat(Integer.valueOf(strBoat[0]), strBoat[1], Integer.valueOf(strBoat[0]), new Member(9999, "Test", "Test"));
+		Boat toReturn = new Boat(Integer.valueOf(strBoat[0]), BoatTypes.boatTypes.valueOf(strBoat[1]), Integer.valueOf(strBoat[0]), new Member(9999, "Test", "Test"));
 				
 		return toReturn;
 		}
