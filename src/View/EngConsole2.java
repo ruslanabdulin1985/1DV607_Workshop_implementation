@@ -176,5 +176,21 @@ public class EngConsole2 {
 		System.out.print(sc.getText());
 	}
 
+	public void askForBoatType() {
+		System.out.println("Enter boat type");
+		
+	}
+
+	public void askForBoatLength() {
+		System.out.println("Enter boat length");
+	}
+
+	public void askForBoatOwnerID() {
+		System.out.println("Enter boat owner's ID");
+	}
+
+	public void showWrongLengthError() {
+		System.err.println("length doesn't seem to be a number");
+	}
 	
 }

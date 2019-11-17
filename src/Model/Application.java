@@ -33,20 +33,13 @@ public class Application {
 //	}
 		
 	
-	// Add a boat to the list of boats
-//	public boolean addBoat(String bType, int bLength, int mUID) {
-//		boolean toReturn = false;
-//		
-//		if (getMemberById(mUID)!=null) {// if that null - don't create a boat
-//			int bUID = db.getNextBID();
-//			Model.Boat bt = new Boat(bUID, bType, bLength,  getMemberById(mUID));
-//			boatList.add(bt);
-//			db.AddBoatFile(bt); //add to database
-//			toReturn = true;
-//		}
-//		
-//		return toReturn;
-//	}
+//	 Add a boat to the list of boats
+	public void addBoat(String bType, int bLength, Member m) {	
+		int bUID = db.getNextBID();
+		Model.Boat bt = new Boat(bUID, bType, bLength,  m);
+		boatList.add(bt);
+		db.AddBoatFile(bt); //add to database
+	}
 	
 	
 	//Change a Boat by Boat ID
@@ -147,4 +140,13 @@ public class Application {
 		this.memberList.edit(oldMem, newMem);
 		db.AddMemberFile(newMem);	
 	}
+	
+	public void editBoat(int tmpID, String type, int length) {
+		Boat oldBoat = this.boatList.getBoatById(tmpID);
+//		Boat newBoat = new Boat(tmpID, type, length);
+//		this.memberList.edit(oldMem, newMem);
+//		db.AddMemberFile(newMem);	
+	}
+	
+	
 }

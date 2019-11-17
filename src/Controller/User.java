@@ -52,6 +52,10 @@ public class User {
 		else if (status == Statuses.memDetail) {
 			this.status = act.actionsAgainstMember(app, con, userInput);
 		}
+		
+		else if (status == Statuses.boatDetail) {
+			this.status = act.actionsAgainstBoats(app, con, userInput);
+		}
 			
 		
 		if (con.wantsToQuit(userInput)) {
