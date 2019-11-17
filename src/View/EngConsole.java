@@ -11,10 +11,10 @@ import Model.BoatTypes.boatTypes;
 import Model.Member;
 import Model.MemberList;
 
-public class EngConsole2 {
+public class EngConsole implements Console{
 
 
-	public EngConsole2() {
+	public EngConsole() {
 		
 		
 	}

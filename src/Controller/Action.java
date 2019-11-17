@@ -6,14 +6,11 @@ import Model.Application;
 import Model.Boat;
 import Model.BoatTypes.boatTypes;
 import Model.Member;
-import View.EngConsole2;
+import View.Console;
+
 
 public class Action {
 	int tmpID = 0;
-	
-	Action(){	
-		
-	}
 	
 	// INNER CLASS TO STORE BUFFER BOAT DATA
 	private class BufferBoatInfo{
@@ -43,7 +40,7 @@ public class Action {
 		String name;
 		String personNum;
 		
-		private BufferMemberInfo(EngConsole2 con){
+		private BufferMemberInfo(Console con){
 			con.askForMemberName();
 			this.name =  con.getInput();
 			con.askForMemberPersonNum();
@@ -60,7 +57,7 @@ public class Action {
 	}
 
 
-	Statuses MainMenu(Application app, EngConsole2 con, String userInput) {
+	Statuses MainMenu(Application app, Console con, String userInput) {
 		if (con.wantsCompactList(userInput)) {
 			con.showCompactList(app.getMemberList());
 			return Statuses.compactMemberList;
@@ -74,14 +71,14 @@ public class Action {
 			return Statuses.main;
 	}
 	
-	Statuses start(EngConsole2 con) {
+	Statuses start(Console con) {
 		con.showGreetingMessage();
 		con.showMainScreen();
 		return Statuses.main;
 	}
 	
 	
-	Statuses actionsAgainstMember(Application app, EngConsole2 con, String userInput) {
+	Statuses actionsAgainstMember(Application app, Console con, String userInput) {
 		if (con.wantsToDelete(userInput)) {
 			con.askforAprrove();
 			if (con.doesUserAprrove(con.getInput())) {
@@ -97,13 +94,14 @@ public class Action {
 		}
 		if (con.wantsGoBack(userInput)) {
 			con.showCompactList(app.getMemberList());
+			tmpID = 0;
 			return Statuses.compactMemberList;
 		}
 		
 		return Statuses.compactMemberList;
 	}
 
-	Statuses goIntoMemberDetail(Application app, EngConsole2 con, String userInput) {
+	Statuses goIntoMemberDetail(Application app, Console con, String userInput) {
 		if (con.userInputIsAnumber(userInput)) {
 			Member mbr = app.getMemberList().getMemberById(Integer.valueOf(userInput));
 			if(mbr!=null) {
@@ -123,13 +121,14 @@ public class Action {
 		
 		if (con.wantsGoBack(userInput)) {
 			con.showMainScreen();
+			tmpID = 0;
 			return Statuses.main;
 		}
 		
 		return Statuses.compactMemberList;
 	}
 
-	Statuses goIntoBoatDetail(Application app, EngConsole2 con, String userInput) {
+	Statuses goIntoBoatDetail(Application app, Console con, String userInput) {
 		if (con.userInputIsAnumber(userInput)) { // If a number show boat detail
 			Boat bt = app.getBoaList().getBoatById(Integer.valueOf(userInput));
 			if(bt!=null) {
@@ -158,13 +157,14 @@ public class Action {
 		
 		if (con.wantsGoBack(userInput)) {
 			con.showMainScreen();
+			tmpID = 0;
 			return Statuses.main;
 		}
 		con.showBoatList(app.getBoaList());
 		return Statuses.boatList;
 	}
   
-	private BufferBoatInfo createBufferBoatInfo(EngConsole2 con, Application app){
+	private BufferBoatInfo createBufferBoatInfo(Console con, Application app){
 		
 		con.askForBoatType();
 		String type = con.getInputBoatType();
@@ -177,7 +177,7 @@ public class Action {
 		return buffer;
 	}
 
-	public Statuses actionsAgainstBoats(Application app, EngConsole2 con, String userInput) {
+	public Statuses actionsAgainstBoats(Application app, Console con, String userInput) {
 		if (con.wantsToDelete(userInput)) {
 			con.askforAprrove();
 			if (con.doesUserAprrove(con.getInput())) {

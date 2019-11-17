@@ -3,7 +3,8 @@ package Controller;
 import Model.Application;
 import Model.Boat;
 import Model.Member;
-import View.EngConsole2;
+import View.Console;
+import View.EngConsole;
 
 public class User {
 	
@@ -28,7 +29,7 @@ public class User {
 	}
 	
 	
-	public void run(Application app, EngConsole2 con) {
+	public void run(Application app, Console con) {
 		String userInput = "";
 		
 		if (status == Statuses.start) {
