@@ -1,10 +1,7 @@
 package View;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Scanner;
 
-import Controller.User;
 import Model.Boat;
 import Model.BoatList;
 import Model.BoatTypes.boatTypes;
@@ -24,6 +21,7 @@ public class EngConsole implements Console{
 		Scanner sc = new Scanner(System.in);
 		String Input = sc.nextLine();
 		return Input;
+		
 	}
 	
 	public boolean wantsCompactList(String input) {

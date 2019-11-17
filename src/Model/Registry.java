@@ -10,15 +10,11 @@ import java.util.Scanner;
 
 public class Registry{
 	
-
+	private final String dataBaseBoatsPath = "db/boats/";
+	private final String dataBaseMembersPath = "db/members/";
 	private int nextUID = loadNextUID();
 	private int nextBID = loadNextBID();
-	
-	private String defaultPathMembers = "db/members/";
-	
-	private String defaultPathBoats = "db/boats/";
-	
-	
+
 	public int getNextBID(){
 		return nextBID;
 	}
@@ -28,11 +24,11 @@ public class Registry{
 	}
 	
 	public void saveNextUID() {
-		saveNextID("db/members/max.id", nextUID);
+		saveNextID(dataBaseBoatsPath+"max.id", nextUID);
 	}
 	
 	public void saveNextBID() {
-		saveNextID("db/boats/max.id", nextUID);
+		saveNextID(dataBaseBoatsPath+"max.id", nextUID);
 	}
 	
 	private void saveNextID(String path, int nextID) {
@@ -80,16 +76,16 @@ public class Registry{
 	}
 	
 	public int loadNextUID() {
-		return loadNextID("db/members/max.id");
+		return loadNextID(dataBaseMembersPath+"max.id");
 	}
 	
 	public int loadNextBID() {
-		return loadNextID("db/boats/max.id");	
+		return loadNextID(dataBaseBoatsPath+"max.id");	
 	}
 	
 	
 	public void RemoveBoatFile (Boat bt) {
-		File toDelete = new File(defaultPathBoats + String.valueOf(bt.getBID()) + ".boat");
+		File toDelete = new File(dataBaseBoatsPath + String.valueOf(bt.getBID()) + ".boat");
 		try {
 			toDelete.delete();		
 		}
@@ -99,7 +95,7 @@ public class Registry{
 	}
 	
 	public void AddBoatFile(Boat bt) {
-		File saveFile = new File(defaultPathBoats + bt.getBID()+ ".boat");
+		File saveFile = new File(dataBaseBoatsPath + bt.getBID()+ ".boat");
 		
 		try {
 			BufferedWriter writer;
@@ -116,7 +112,7 @@ public class Registry{
 	
 	
 	public void AddMemberFile(Member mbr) {
-		File saveFile = new File(defaultPathMembers + mbr.getUID()+ ".mem");
+		File saveFile = new File(dataBaseMembersPath + mbr.getUID()+ ".mem");
 		
 		try {
 			BufferedWriter writer;
@@ -132,7 +128,7 @@ public class Registry{
 	}
 	
 	public void RemoveMemberFile(Member mbr) {
-		File toDelete = new File(defaultPathMembers + String.valueOf(mbr.getUID()) + ".mem");
+		File toDelete = new File(dataBaseMembersPath + String.valueOf(mbr.getUID()) + ".mem");
 		try {
 			toDelete.delete();		
 		}
@@ -142,7 +138,7 @@ public class Registry{
 	}
 	
 	private String[] getMemFiles() {
-		File dir = new File(defaultPathMembers);
+		File dir = new File(dataBaseMembersPath);
 		String[] toReturn = new String[0];
 		String[] total = dir.list();
 		for (String f : total) {
@@ -179,9 +175,9 @@ public class Registry{
 	}
 	
 	public Boat readBoatFile(String filename) {
-		File file = new File("db/boats/"+filename);
+		File file = new File(dataBaseBoatsPath+filename);
 		
-		String[] strBoat = readFile("db/boats/", filename);
+		String[] strBoat = readFile(dataBaseBoatsPath, filename);
 		Boat toReturn = new Boat(Integer.valueOf(strBoat[0]), BoatTypes.boatTypes.valueOf(strBoat[1]), Integer.valueOf(strBoat[0]), new Member(9999, "Test", "Test"));
 				
 		return toReturn;
@@ -189,7 +185,7 @@ public class Registry{
 	
 	//TODO CHANGE to= getFiles!!!
 	private String[] getBoatFiles() {		
-		File dir = new File(defaultPathBoats);
+		File dir = new File(dataBaseBoatsPath);
 		String[] toReturn = new String[0];
 		String[] total = dir.list();
 		for (String f : total) {
@@ -211,7 +207,7 @@ public class Registry{
 		
 	public Member readMemberFile(String filename){
 		
-		String[] strMember = readFile("db/members/", filename);
+		String[] strMember = readFile(dataBaseMembersPath, filename);
 		
 		Member toReturn = new Member(Integer.valueOf(strMember[0]), strMember[1], strMember[2]);
 		
