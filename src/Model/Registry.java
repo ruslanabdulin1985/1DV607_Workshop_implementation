@@ -10,6 +10,8 @@ import java.util.Scanner;
 
 public class Registry{
 	
+	// Class to work with filesystem
+	
 	private final String dataBaseBoatsPath = "db/boats/";
 	private final String dataBaseMembersPath = "db/members/";
 	private int nextUID = loadNextUID();
@@ -24,7 +26,7 @@ public class Registry{
 	}
 	
 	public void saveNextUID() {
-		saveNextID(dataBaseBoatsPath+"max.id", nextUID);
+		saveNextID(dataBaseMembersPath+"max.id", nextUID);
 	}
 	
 	public void saveNextBID() {
@@ -137,23 +139,9 @@ public class Registry{
 		}
 	}
 	
-	private String[] getMemFiles() {
-		File dir = new File(dataBaseMembersPath);
-		String[] toReturn = new String[0];
-		String[] total = dir.list();
-		for (String f : total) {
-			if(f.contains(".mem")) {
-				toReturn = Arrays.copyOf(toReturn, toReturn.length + 1);
-				toReturn[toReturn.length - 1] = f;
-			}
-		
-		}
-		return toReturn;
-	}
-	
 	public MemberList getMembers() {
 		MemberList toReturn = new MemberList();
-		for (String filename : getMemFiles()) {
+		for (String filename : getFiles(dataBaseMembersPath)) {
 			toReturn.add(readMemberFile(filename));
 		}
 		return toReturn;
@@ -175,42 +163,36 @@ public class Registry{
 	}
 	
 	public Boat readBoatFile(String filename) {
-		File file = new File(dataBaseBoatsPath+filename);
-		
 		String[] strBoat = readFile(dataBaseBoatsPath, filename);
-		Boat toReturn = new Boat(Integer.valueOf(strBoat[0]), BoatTypes.boatTypes.valueOf(strBoat[1]), Integer.valueOf(strBoat[0]), new Member(9999, "Test", "Test"));
-				
+		Boat toReturn = new Boat(Integer.valueOf(strBoat[0]), BoatTypes.boatTypes.valueOf(strBoat[1]), Integer.valueOf(strBoat[2]), new Member(Integer.valueOf(strBoat[3]), "EMPTY", "EMPTY"));			
 		return toReturn;
 		}
 	
-	//TODO CHANGE to= getFiles!!!
-	private String[] getBoatFiles() {		
-		File dir = new File(dataBaseBoatsPath);
+	private String[] getFiles(String path) {
+		File dir = new File(path);
 		String[] toReturn = new String[0];
 		String[] total = dir.list();
 		for (String f : total) {
-			if(f.contains(".boat")) {
+			if(f.contains(".mem") || f.contains(".boat")) {
 				toReturn = Arrays.copyOf(toReturn, toReturn.length + 1);
 				toReturn[toReturn.length - 1] = f;
 			}
 		}
 		return toReturn;
-		}
+	}
+	
 	
 	public BoatList getBoats() {
 		BoatList toReturn = new BoatList();
-		for (String filename : getBoatFiles()) {
+		for (String filename : getFiles(dataBaseBoatsPath)) {
 			toReturn.add(readBoatFile(filename));
 		}
 		return toReturn;
 	}
-		
-	public Member readMemberFile(String filename){
-		
+	
+	public Member readMemberFile(String filename){	
 		String[] strMember = readFile(dataBaseMembersPath, filename);
-		
 		Member toReturn = new Member(Integer.valueOf(strMember[0]), strMember[1], strMember[2]);
-		
 		return toReturn;
 		}
 	

@@ -6,7 +6,7 @@ public enum boatTypes {
 	KayakCanoe,
 	Motorsailer,
 	Sailboat,
-	Other
+	Other,
 }
 
 }

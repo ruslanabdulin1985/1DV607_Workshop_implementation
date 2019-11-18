@@ -43,4 +43,8 @@ public class Boat{
 	public Member getOwner() {
 		return owner;
 	}
+
+	public void setOwner(Member o) {
+		this.owner = o;
+	}
 }

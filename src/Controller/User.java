@@ -1,28 +1,23 @@
 package Controller;
 
 import Model.Application;
-import Model.Boat;
-import Model.Member;
 import View.Console;
-import View.EngConsole;
+
 
 public class User {
 	
 	Action act;
 	
+	// Status shows at which point of interaction User is at that point 
 	 public enum Statuses {
-		exit,
-		main,
-		start, bufferCollect,
-		compactMemberList, boatList, verboseMemberList, memDetail, boatDetail,
+		exit, main, start, bufferCollect, boatDetail,
+		compactMemberList, boatList, verboseMemberList, memDetail, 
 	}
 	
 	int tmpID = 0;
 	
 	private Statuses status;
 
-	
-//	Application runningApp;
 	public User() {
 		status = Statuses.start;
 		act = new Action();
@@ -32,12 +27,16 @@ public class User {
 	public void run(Application app, Console con) {
 		String userInput = "";
 		
+		// Begining
 		if (status == Statuses.start) {
 			this.status = act.start(con);
 		}
 		
+		//Gets user's input
 		userInput = con.getInput();
 		
+		
+		// depending on the status of kontorller proceeds user's input differently
 		if (status == Statuses.main) {
 			this.status = act.MainMenu(app, con, userInput);
 		}
@@ -60,8 +59,8 @@ public class User {
 			
 		
 		if (con.wantsToQuit(userInput)) {
-			con.showGoodbyeMessage();
-			app.exit();
+			act.exitApp(con, app);
+			
 		}
 		
 		

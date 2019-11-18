@@ -17,11 +17,9 @@ public class EngConsole implements Console{
 	}
 	
 	public String getInput() {
-		
 		Scanner sc = new Scanner(System.in);
 		String Input = sc.nextLine();
 		return Input;
-		
 	}
 	
 	public boolean wantsCompactList(String input) {
@@ -93,7 +91,7 @@ public class EngConsole implements Console{
 		System.out.println(">>>");
 	}
 
-	public void showMemDetail(Member mbr) {
+	public void showMemDetail(Member mbr, BoatList btls) {
 		Screen sc = new Screen("showMemDetail");
 		sc.addTextLine("\t:::Member's Detail:::");
 		sc.addTextLine("");
@@ -101,13 +99,14 @@ public class EngConsole implements Console{
 		sc.addItemLine(String.valueOf(mbr.getUID()), mbr.getName(), mbr.getPersonalNumber());
 		sc.addTextLine("\tAttached boats:");
 		sc.addTextLine("\tid  -  type  -  size");
+		for (Boat bt : btls)
+			sc.addTextLine("\t" + bt.getBID() + "\t" + bt.getType() + "\t" + bt.getLength());
 		sc.addTextLine("e-Edit, d-Delete, b-Back, q-Quit");
 		sc.addTextLine("");
 		sc.addCommandLine();
 		System.out.println(sc.getText());
 		
 	}
-	
 
 	public boolean wantsBoatList(String userInput) {
 		if (userInput.equals("2")) {
@@ -119,8 +118,6 @@ public class EngConsole implements Console{
 	public void showGoodbyeMessage() {
 		System.out.println("Application closed");
 	}
-	
-	
 	
 	public boolean userInputIsAnumber(String input){
 		return input.matches("\\d+");
@@ -169,6 +166,7 @@ public class EngConsole implements Console{
 		sc.addItemLine(String.valueOf(bt.getBID()), String.valueOf(bt.getType()), String.valueOf(bt.getLength()));
 		sc.addTextLine("\tOwner:");
 		sc.addTextLine("\tid  -  type  -  size");
+		sc.addTextLine("\t" + bt.getOwner().getUID() + "\t" + bt.getOwner().getName()+"\t"+bt.getOwner().getPersonalNumber());
 		sc.addTextLine("");
 		sc.addTextLine("e-Edit, d-Delete, b-Back, q-Quit");
 		sc.addTextLine("");
@@ -222,13 +220,12 @@ public class EngConsole implements Console{
 	}
 
 	public String getInputBoatType() {        
-        
-		Scanner sc = new Scanner(System.in);
-		String Input = sc.nextLine();
+		//Scanner sc = new Scanner(System.in);
+		String Input = getInput();
 		// make sure that user provides a number
 		while (!userInputIsAnumber(Input)) {
 			System.err.println("ERROR! Provide a number");
-			Input = sc.nextLine();
+			Input = getInput();
 		}
 		
 		String toReturn = "";

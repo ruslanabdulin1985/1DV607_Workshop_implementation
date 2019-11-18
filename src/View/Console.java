@@ -30,7 +30,7 @@ public interface Console {
 	
 	public boolean wantsBoatList(String userInput);
 	
-	public void showMemDetail(Member mbr) ;
+	public void showMemDetail(Member mbr, BoatList btls) ;
 	
 	public void showMemberDoesNoetExistError(String UID);
 	

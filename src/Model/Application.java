@@ -14,8 +14,17 @@ public class Application {
 	public Application() {
 		this.memberList = db.getMembers();
 		this.boatList=db.getBoats();
+		ConnectBoatsAndMembers();
 		}
 	
+	private void ConnectBoatsAndMembers() {
+		for (Boat b : this.boatList) {
+			int ownerID = b.getOwner().getUID();
+			Member owner = this.memberList.getMemberById(ownerID);
+			b.setOwner(owner);
+		}
+	}
+
 	public MemberList getMemberList() {
 		return this.memberList;
 	}
@@ -113,6 +122,7 @@ public class Application {
 
 	public void deleteBoat(int bUID) {
 		Boat bt = this.boatList.getBoatById(bUID);
+		db.RemoveBoatFile(bt);
 		this.boatList.delete(bt);
 	}
 
@@ -128,5 +138,14 @@ public class Application {
 		Boat newBoat = new Boat(tmpID, type, length,  m);
 		this.boatList.edit(oldBoat, newBoat);
 		db.AddBoatFile(newBoat);	
+	}
+
+	public BoatList getAttachedBoats(Member mbr) {
+		BoatList btls = new BoatList();
+		for (Boat bt : this.boatList)
+			if (bt.getOwner().equals(mbr))
+				btls.add(bt);
+		
+		return btls;
 	}	
 }

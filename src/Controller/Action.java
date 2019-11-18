@@ -4,6 +4,7 @@ package Controller;
 import Controller.User.Statuses;
 import Model.Application;
 import Model.Boat;
+import Model.BoatList;
 import Model.BoatTypes.boatTypes;
 import Model.Member;
 import View.Console;
@@ -35,16 +36,14 @@ public class Action {
 		}
 	}
 	
-//	 INNTER CLASS TO STORE BUFFER MEMBER DATA
+//	 INNER CLASS TO STORE BUFFER MEMBER DATA
 	private class BufferMemberInfo{
 		String name;
 		String personNum;
 		
-		private BufferMemberInfo(Console con){
-			con.askForMemberName();
-			this.name =  con.getInput();
-			con.askForMemberPersonNum();
-			this.personNum = con.getInput();
+		private BufferMemberInfo(String n, String p) {
+			name = n;
+			personNum = p;
 		}
 		
 		private String getName() {
@@ -56,7 +55,7 @@ public class Action {
 		}
 	}
 
-
+	// Main menu
 	Statuses MainMenu(Application app, Console con, String userInput) {
 		if (con.wantsCompactList(userInput)) {
 			con.showCompactList(app.getMemberList());
@@ -67,17 +66,19 @@ public class Action {
 			con.showBoatList(app.getBoaList());
 			return Statuses.boatList;
 		}
+		
 		else
 			return Statuses.main;
 	}
 	
+	// Starting application
 	Statuses start(Console con) {
 		con.showGreetingMessage();
 		con.showMainScreen();
 		return Statuses.main;
 	}
 	
-	
+	// Inside member's detail
 	Statuses actionsAgainstMember(Application app, Console con, String userInput) {
 		if (con.wantsToDelete(userInput)) {
 			con.askforAprrove();
@@ -87,11 +88,12 @@ public class Action {
 			}
 			
 			else if (con.wantsToEdit(userInput)) {
-				BufferMemberInfo buffer = new BufferMemberInfo(con);
+				BufferMemberInfo buffer = createMemberBufferInfo(con);
 				app.editMember(tmpID, buffer.getName(), buffer.getPersonNum());
 				con.showCompactList(app.getMemberList());
 			}
 		}
+		
 		if (con.wantsGoBack(userInput)) {
 			con.showCompactList(app.getMemberList());
 			tmpID = 0;
@@ -101,12 +103,14 @@ public class Action {
 		return Statuses.compactMemberList;
 	}
 
+	// Inside verbose member list and compact member list
 	Statuses goIntoMemberDetail(Application app, Console con, String userInput) {
 		if (con.userInputIsAnumber(userInput)) {
 			Member mbr = app.getMemberList().getMemberById(Integer.valueOf(userInput));
 			if(mbr!=null) {
+				BoatList btlst = app.getAttachedBoats(mbr);
 				tmpID = Integer.valueOf(userInput);
-				con.showMemDetail(mbr);
+				con.showMemDetail(mbr, btlst);
 				return Statuses.memDetail;
 			}
 			else
@@ -114,7 +118,7 @@ public class Action {
 			
 		}
 		else if(con.wantsToAdd(userInput)) {
-			BufferMemberInfo buffer = new BufferMemberInfo(con);
+			BufferMemberInfo buffer = createMemberBufferInfo(con);
 			app.addMember(buffer.getName(), buffer.getPersonNum());
 			con.showCompactList(app.getMemberList());
 		}
@@ -127,7 +131,8 @@ public class Action {
 		
 		return Statuses.compactMemberList;
 	}
-
+	
+	// Inside boat list
 	Statuses goIntoBoatDetail(Application app, Console con, String userInput) {
 		if (con.userInputIsAnumber(userInput)) { // If a number show boat detail
 			Boat bt = app.getBoaList().getBoatById(Integer.valueOf(userInput));
@@ -164,8 +169,17 @@ public class Action {
 		return Statuses.boatList;
 	}
   
+	
+	private BufferMemberInfo createMemberBufferInfo(Console con){	
+		con.askForMemberName();
+		String bname =  con.getInput();
+		con.askForMemberPersonNum();
+		String bpersonNum = con.getInput();
+		BufferMemberInfo buffer = new BufferMemberInfo(bname, bpersonNum);
+		return buffer;
+	}
+	
 	private BufferBoatInfo createBufferBoatInfo(Console con, Application app){
-		
 		con.askForBoatType();
 		String type = con.getInputBoatType();
 		con.askForBoatLength();
@@ -177,6 +191,7 @@ public class Action {
 		return buffer;
 	}
 
+	// inside Boat's detail
 	public Statuses actionsAgainstBoats(Application app, Console con, String userInput) {
 		if (con.wantsToDelete(userInput)) {
 			con.askforAprrove();
@@ -185,6 +200,7 @@ public class Action {
 				con.showBoatList(app.getBoaList());
 			}
 		}
+		
 		else if (con.wantsToEdit(userInput)) {
 			BufferBoatInfo buffer = createBufferBoatInfo(con, app);
 			if (app.getMemberList().getMemberById(Integer.valueOf(buffer.getOwnerID()))==null) {
@@ -200,6 +216,11 @@ public class Action {
 		}
 	
 		return Statuses.boatList;
+	}
+
+	public void exitApp(Console con, Application app) {
+		con.showGoodbyeMessage();
+		app.exit();
 	}
 	
 }
