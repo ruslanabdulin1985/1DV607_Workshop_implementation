@@ -30,7 +30,7 @@ public class Registry{
 	}
 	
 	public void saveNextBID() {
-		saveNextID(dataBaseBoatsPath+"max.id", nextUID);
+		saveNextID(dataBaseBoatsPath+"max.id", nextBID);
 	}
 	
 	private void saveNextID(String path, int nextID) {
@@ -96,7 +96,7 @@ public class Registry{
 		}
 	}
 	
-	public void AddBoatFile(Boat bt) {
+	public void AddBoatFile(Boat bt, Boolean add) {
 		File saveFile = new File(dataBaseBoatsPath + bt.getBID()+ ".boat");
 		
 		try {
@@ -108,12 +108,14 @@ public class Registry{
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		increaseNextBID();
-		saveNextBID();
+		if (add) {
+			increaseNextBID();
+			saveNextBID();
+		}
 	}
 	
 	
-	public void AddMemberFile(Member mbr) {
+	public void AddMemberFile(Member mbr, boolean add) {
 		File saveFile = new File(dataBaseMembersPath + mbr.getUID()+ ".mem");
 		
 		try {
@@ -125,8 +127,11 @@ public class Registry{
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		this.increaseNextUID();
-		this.saveNextUID();
+		
+		if (add) {
+			this.increaseNextUID();
+			this.saveNextUID();
+		}
 	}
 	
 	public void RemoveMemberFile(Member mbr) {

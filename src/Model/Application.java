@@ -24,49 +24,41 @@ public class Application {
 			b.setOwner(owner);
 		}
 	}
+	
+	public MemberList getCopyOfMemberList() {
+		// 
+		return this.memberList.clone();
+	}
 
-	public MemberList getMemberList() {
+	MemberList getMemberList() { // This function reachable only within the package
+		// in order to protect data from accidental change by controller or view
 		return this.memberList;
 	}
 	
-	public BoatList getBoaList() {
-		return this.boatList;
+	public BoatList getCopyOfBoatList() {
+		return this.boatList.clone();
 	}
 	
-//	public String[] getBoatTypes() {
-//		
-//		String[] toReturn = new String[0]; 
-//		for (BoatTypes.boatTypes type : BoatTypes.boatTypes.values()) { 
-//			toReturn = new String[toReturn.length + 1];
-//			type.toString();
-//		}
-//		return toReturn;
-//	}
+	BoatList getBoaList() {
+		return this.boatList;
+	}
 		
 	
 //	 Add a boat to the list of boats
 	public void addBoat(BoatTypes.boatTypes bType, int bLength, Member m) {	
 		int bUID = db.getNextBID();
+
 		Model.Boat bt = new Boat(bUID, bType, bLength,  m);
 		boatList.add(bt);
-		db.AddBoatFile(bt); //add to database
+		db.AddBoatFile(bt, true); //add to database
 	}
 	
-	
-	//Change a Boat by Boat ID
-//	public void changeBoat(String BID, String[] arr) {
-//		Boat bt = new Boat(Integer.valueOf(arr[0]), arr[1], Integer.valueOf(arr[2]), getMemberById(Integer.valueOf(arr[3]) ));
-//		for (int i=0; i<boatList.size(); i++)
-//			if (Integer.valueOf(BID) == boatList.get(i).getBID())
-//				boatList.set(i, bt);
-//		db.AddBoatFile(bt); // save changes to database
-//	}
 	
 	//Add a member to the list of member
 	public void addMember(String name, String personNumber) {
 		Member mbr = new Member(db.getNextUID(), name, personNumber);
 		memberList.add(mbr);
-		db.AddMemberFile(mbr); //add to database
+		db.AddMemberFile(mbr, true); //add to database
 	}
 	
 	// Array List representation of Boats
@@ -130,14 +122,14 @@ public class Application {
 		Member oldMem = this.memberList.getMemberById(tmpID);
 		Member newMem = new Member(tmpID, name, personNum);
 		this.memberList.edit(oldMem, newMem);
-		db.AddMemberFile(newMem);	
+		db.AddMemberFile(newMem, false);	
 	}
 	
 	public void editBoat(int tmpID, boatTypes type, int length, Member m) {
 		Boat oldBoat = this.boatList.getBoatById(tmpID);
 		Boat newBoat = new Boat(tmpID, type, length,  m);
 		this.boatList.edit(oldBoat, newBoat);
-		db.AddBoatFile(newBoat);	
+		db.AddBoatFile(newBoat, false);	
 	}
 
 	public BoatList getAttachedBoats(Member mbr) {

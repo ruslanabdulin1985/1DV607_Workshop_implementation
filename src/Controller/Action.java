@@ -58,12 +58,12 @@ public class Action {
 	// Main menu
 	Statuses MainMenu(Application app, Console con, String userInput) {
 		if (con.wantsCompactList(userInput)) {
-			con.showCompactList(app.getMemberList());
+			con.showCompactList(app.getCopyOfMemberList());
 			return Statuses.compactMemberList;
 		}
 		
 		else if (con.wantsBoatList(userInput)) {
-			con.showBoatList(app.getBoaList());
+			con.showBoatList(app.getCopyOfBoatList());
 			return Statuses.boatList;
 		}
 		
@@ -84,18 +84,20 @@ public class Action {
 			con.askforAprrove();
 			if (con.doesUserAprrove(con.getInput())) {
 				app.deleteMember(tmpID);
-				con.showCompactList(app.getMemberList());
-			}
+				con.showCompactList(app.getCopyOfMemberList());
+			}	
+		}
+		
+		else if (con.wantsToEdit(userInput)) {
+			System.out.println("Start Editing");
+			BufferMemberInfo buffer = createMemberBufferInfo(con);
 			
-			else if (con.wantsToEdit(userInput)) {
-				BufferMemberInfo buffer = createMemberBufferInfo(con);
-				app.editMember(tmpID, buffer.getName(), buffer.getPersonNum());
-				con.showCompactList(app.getMemberList());
-			}
+			app.editMember(tmpID, buffer.getName(), buffer.getPersonNum());
+			con.showCompactList(app.getCopyOfMemberList());
 		}
 		
 		if (con.wantsGoBack(userInput)) {
-			con.showCompactList(app.getMemberList());
+			con.showCompactList(app.getCopyOfMemberList());
 			tmpID = 0;
 			return Statuses.compactMemberList;
 		}
@@ -106,7 +108,7 @@ public class Action {
 	// Inside verbose member list and compact member list
 	Statuses goIntoMemberDetail(Application app, Console con, String userInput) {
 		if (con.userInputIsAnumber(userInput)) {
-			Member mbr = app.getMemberList().getMemberById(Integer.valueOf(userInput));
+			Member mbr = app.getCopyOfMemberList().getMemberById(Integer.valueOf(userInput));
 			if(mbr!=null) {
 				BoatList btlst = app.getAttachedBoats(mbr);
 				tmpID = Integer.valueOf(userInput);
@@ -117,10 +119,18 @@ public class Action {
 				con.showMemberDoesNoetExistError(userInput);
 			
 		}
+		
+		
+//		else if (con.wantsVerboseList(userInput)) {
+//			con.showVerboseList(MemberList mbrlst, BoatList btlst){
+//				
+//			}
+//		}
+		
 		else if(con.wantsToAdd(userInput)) {
 			BufferMemberInfo buffer = createMemberBufferInfo(con);
 			app.addMember(buffer.getName(), buffer.getPersonNum());
-			con.showCompactList(app.getMemberList());
+			con.showCompactList(app.getCopyOfMemberList());
 		}
 		
 		if (con.wantsGoBack(userInput)) {
@@ -135,7 +145,7 @@ public class Action {
 	// Inside boat list
 	Statuses goIntoBoatDetail(Application app, Console con, String userInput) {
 		if (con.userInputIsAnumber(userInput)) { // If a number show boat detail
-			Boat bt = app.getBoaList().getBoatById(Integer.valueOf(userInput));
+			Boat bt = app.getCopyOfBoatList().getBoatById(Integer.valueOf(userInput));
 			if(bt!=null) {
 				tmpID = Integer.valueOf(userInput);
 				con.showBoatDetail(bt);
@@ -147,7 +157,7 @@ public class Action {
 		}
 		else if(con.wantsToAdd(userInput)) { //else if an add character - add a boat
 			BufferBoatInfo buffer = createBufferBoatInfo(con, app);
-			Member m = app.getMemberList().getMemberById(Integer.valueOf(buffer.getOwnerID()));
+			Member m = app.getCopyOfMemberList().getMemberById(Integer.valueOf(buffer.getOwnerID()));
 			if (!con.userInputIsAnumber(buffer.getLength())) {
 				con.showWrongLengthError();
 			}
@@ -165,7 +175,7 @@ public class Action {
 			tmpID = 0;
 			return Statuses.main;
 		}
-		con.showBoatList(app.getBoaList());
+		con.showBoatList(app.getCopyOfBoatList());
 		return Statuses.boatList;
 	}
   
@@ -184,7 +194,7 @@ public class Action {
 		String type = con.getInputBoatType();
 		con.askForBoatLength();
 		String length = con.getInput();
-		con.showChooseMemberList(app.getMemberList());
+		con.showChooseMemberList(app.getCopyOfMemberList());
 		con.askForBoatOwnerID();
 		String ownerID = con.getInput();
 		BufferBoatInfo buffer = new BufferBoatInfo(type, length, ownerID);
@@ -197,22 +207,22 @@ public class Action {
 			con.askforAprrove();
 			if (con.doesUserAprrove(con.getInput())) {
 				app.deleteBoat(tmpID);
-				con.showBoatList(app.getBoaList());
+				con.showBoatList(app.getCopyOfBoatList());
 			}
 		}
 		
 		else if (con.wantsToEdit(userInput)) {
 			BufferBoatInfo buffer = createBufferBoatInfo(con, app);
-			if (app.getMemberList().getMemberById(Integer.valueOf(buffer.getOwnerID()))==null) {
-				app.editBoat(tmpID, boatTypes.valueOf(buffer.getType()), Integer.valueOf(buffer.getLength()), app.getMemberList().getMemberById(Integer.valueOf(buffer.getOwnerID())));
-				con.showBoatList(app.getBoaList());
+			if (app.getCopyOfMemberList().getMemberById(Integer.valueOf(buffer.getOwnerID()))!=null) {
+				app.editBoat(tmpID, boatTypes.valueOf(buffer.getType()), Integer.valueOf(buffer.getLength()), app.getCopyOfMemberList().getMemberById(Integer.valueOf(buffer.getOwnerID())));
+				con.showBoatList(app.getCopyOfBoatList());
 			}
 			else
 				con.showMemberDoesNoetExistError(buffer.getOwnerID());
 		}
 			
 		else if (con.wantsGoBack(userInput)) {
-			con.showBoatList(app.getBoaList());
+			con.showBoatList(app.getCopyOfBoatList());
 		}
 	
 		return Statuses.boatList;

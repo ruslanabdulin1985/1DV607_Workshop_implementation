@@ -4,14 +4,22 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class MemberList implements Iterable<Member> {
+public class MemberList implements Iterable<Member>, Cloneable {
 	List<Member>  members; 
 	
 	public MemberList() {
 		members = new ArrayList<Member>();
 	}
 	
-
+	public MemberList clone(){ 
+		// Copy of a Member List
+		MemberList toReturn = new MemberList();
+		for (Member m : this.members)
+			toReturn.add(m);
+		
+		return   (MemberList) toReturn;
+	}
+	
 	public boolean add(Member m) {
 		this.members.add(m);
 		return true;

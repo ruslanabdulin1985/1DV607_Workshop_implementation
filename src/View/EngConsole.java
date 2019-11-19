@@ -238,5 +238,10 @@ public class EngConsole implements Console{
 		}
 		return toReturn;
 	}
+
+	@Override
+	public boolean wantsVerboseList(String input) {
+		return input.equals("v");
+	}
 	
 }

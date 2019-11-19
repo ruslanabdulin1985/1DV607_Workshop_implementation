@@ -57,10 +57,8 @@ public class User {
 			this.status = act.actionsAgainstBoats(app, con, userInput);
 		}
 			
-		
 		if (con.wantsToQuit(userInput)) {
 			act.exitApp(con, app);
-			
 		}
 		
 		
