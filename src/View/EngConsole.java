@@ -76,7 +76,7 @@ public class EngConsole implements Console{
 			sc.addItemLine(String.valueOf(m.getUID()), m.getName(), m.getPersonalNumber());
 		}
 		sc.addTextLine("");
-		sc.addTextLine("#id-Detail, a-Add, b-Back, q-Quit");
+		sc.addTextLine("#id-Detail, v-Verbose, a-Add, b-Back, q-Quit");
 		sc.addCommandLine();
 		System.out.print(sc.getText());
 		return true;
@@ -242,6 +242,30 @@ public class EngConsole implements Console{
 	@Override
 	public boolean wantsVerboseList(String input) {
 		return input.equals("v");
+	}
+
+	@Override
+	public void showVerbosetList(MemberList copyOfMemberList, BoatList copyOfBoatList) {
+		Screen sc = new Screen("Member Verbose List");
+		sc.addTextLine("\t::: Member List Verbose :::");
+		sc.addTextLine("");
+		sc.addTextLine("id  -  name  -  personal numeber");
+		for (Member m : copyOfMemberList) {
+			sc.addItemLine(String.valueOf(m.getUID()), m.getName(), m.getPersonalNumber());
+			sc.addTextLine("\t:Attached Boats:");
+			sc.addTextLine("\tid\tlength\ttype");
+			for (Boat b : copyOfBoatList) {
+				if (b.getOwner().equals(m)) {
+					
+					sc.addTextLine("\t" + String.valueOf(b.getBID()) + "\t" + String.valueOf(b.getLength()) +"\t"+ String.valueOf(b.getType()));
+				}
+			}
+			sc.addTextLine("");
+		}
+		sc.addTextLine("");
+		sc.addTextLine("#id-Detail, a-Add, b-Back, q-Quit");
+		sc.addCommandLine();
+		System.out.print(sc.getText());
 	}
 	
 }

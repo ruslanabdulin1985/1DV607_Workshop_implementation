@@ -128,9 +128,14 @@ public class Action {
 //		}
 		
 		else if(con.wantsToAdd(userInput)) {
-			BufferMemberInfo buffer = createMemberBufferInfo(con);
+			BufferMemberInfo buffer = createMemberBufferInfo(con); // creates buffer member
 			app.addMember(buffer.getName(), buffer.getPersonNum());
 			con.showCompactList(app.getCopyOfMemberList());
+		}
+		
+		else if (con.wantsVerboseList(userInput)) {
+			con.showVerbosetList(app.getCopyOfMemberList(), app.getCopyOfBoatList());
+			return Statuses.verboseMemberList;
 		}
 		
 		if (con.wantsGoBack(userInput)) {
@@ -213,7 +218,7 @@ public class Action {
 		
 		else if (con.wantsToEdit(userInput)) {
 			BufferBoatInfo buffer = createBufferBoatInfo(con, app);
-			if (app.getCopyOfMemberList().getMemberById(Integer.valueOf(buffer.getOwnerID()))!=null) {
+			if (app.getCopyOfMemberList().getMemberById(Integer.valueOf(buffer.getOwnerID()))!=null) /* IF buffer boat has proper data*/ {
 				app.editBoat(tmpID, boatTypes.valueOf(buffer.getType()), Integer.valueOf(buffer.getLength()), app.getCopyOfMemberList().getMemberById(Integer.valueOf(buffer.getOwnerID())));
 				con.showBoatList(app.getCopyOfBoatList());
 			}

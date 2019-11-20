@@ -63,6 +63,8 @@ public interface Console {
 	public void showBoatDoesNoetExistError(String userInput);
 
 	public boolean wantsVerboseList(String userInput);
+
+	public void showVerbosetList(MemberList copyOfMemberList, BoatList copyOfBoatList);
 	
 	
 }
