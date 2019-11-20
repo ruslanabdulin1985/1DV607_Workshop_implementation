@@ -1,6 +1,6 @@
 package Model;
 
-public class Member{
+public class Member implements Comparable<Member>{
 
 	
 	private String name;
@@ -43,6 +43,11 @@ public class Member{
 	public String[] toArr() {
 		String [] arr = {String.valueOf(UID), name, personalNumber};
 		return arr;
+	}
+
+	@Override
+	public int compareTo(Member m) {
+		return this.getUID()-(m.getUID());
 	}
 	
 }

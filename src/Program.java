@@ -10,7 +10,6 @@ public class Program {
 
 	public static void main(String[] args) {
 		Application app = new Application(); // Initializing a application
-		//EngConsole con = new EngConsole(); // Start console
 		Console con = new EngConsole();
 		User cntr = new User();
 		while(true) {

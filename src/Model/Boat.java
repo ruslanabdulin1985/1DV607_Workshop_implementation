@@ -1,6 +1,6 @@
 package Model;
 
-public class Boat{
+public class Boat implements Comparable<Boat>{
 
 	private BoatTypes.boatTypes type;
 	private int length;
@@ -46,5 +46,9 @@ public class Boat{
 
 	public void setOwner(Member o) {
 		this.owner = o;
+	}
+
+	public int compareTo(Boat b) {
+		return this.BID - b.getBID();
 	}
 }

@@ -57,7 +57,7 @@ public class Action {
 
 	// Main menu
 	Statuses MainMenu(Application app, Console con, String userInput) {
-		if (con.wantsCompactList(userInput)) {
+		if (con.wantsMemberList(userInput)) {
 			con.showCompactList(app.getCopyOfMemberList());
 			return Statuses.compactMemberList;
 		}
@@ -121,12 +121,6 @@ public class Action {
 		}
 		
 		
-//		else if (con.wantsVerboseList(userInput)) {
-//			con.showVerboseList(MemberList mbrlst, BoatList btlst){
-//				
-//			}
-//		}
-		
 		else if(con.wantsToAdd(userInput)) {
 			BufferMemberInfo buffer = createMemberBufferInfo(con); // creates buffer member
 			app.addMember(buffer.getName(), buffer.getPersonNum());
@@ -136,6 +130,11 @@ public class Action {
 		else if (con.wantsVerboseList(userInput)) {
 			con.showVerbosetList(app.getCopyOfMemberList(), app.getCopyOfBoatList());
 			return Statuses.verboseMemberList;
+		}
+		
+		else if (con.wantsCompactList(userInput)) {
+			con.showCompactList(app.getCopyOfMemberList());
+			return Statuses.compactMemberList;
 		}
 		
 		if (con.wantsGoBack(userInput)) {
@@ -184,7 +183,7 @@ public class Action {
 		return Statuses.boatList;
 	}
   
-	
+	// Create member buffer to store temporay data
 	private BufferMemberInfo createMemberBufferInfo(Console con){	
 		con.askForMemberName();
 		String bname =  con.getInput();
@@ -194,6 +193,7 @@ public class Action {
 		return buffer;
 	}
 	
+	// Create Boat Buffer to store temporary data
 	private BufferBoatInfo createBufferBoatInfo(Console con, Application app){
 		con.askForBoatType();
 		String type = con.getInputBoatType();

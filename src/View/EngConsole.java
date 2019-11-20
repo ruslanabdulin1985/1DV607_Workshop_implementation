@@ -22,8 +22,12 @@ public class EngConsole implements Console{
 		return Input;
 	}
 	
-	public boolean wantsCompactList(String input) {
+	public boolean wantsMemberList(String input) {
 		return (input.equals("1"));
+	}
+	
+	public boolean wantsCompactList(String input) {
+		return (input.equals("c"));
 	}
 	
 	public void showMainScreen() {
@@ -33,7 +37,6 @@ public class EngConsole implements Console{
 				mainMenu.addTextLine("");
 				mainMenu.addTextLine("1. Members");
 				mainMenu.addTextLine("2. Boats");
-				mainMenu.addTextLine("3. Exit");
 				mainMenu.addTextLine("");
 				mainMenu.addTextLine("Provide a number and press 'Enter', q - Quit");
 				mainMenu.addCommandLine();
@@ -54,6 +57,7 @@ public class EngConsole implements Console{
 	}
 	
 	public boolean showChooseMemberList(MemberList mbrList) {
+		mbrList.sort();
 		Screen sc = new Screen("Choose Member List");
 		sc.addTextLine("\t::: Choose a member :::");
 		sc.addTextLine("");
@@ -68,6 +72,7 @@ public class EngConsole implements Console{
 	
 	
 	public boolean showCompactList(MemberList mbrList) {
+		mbrList.sort(); // Sorting copied mbrList
 		Screen sc = new Screen("Member Compact List");
 		sc.addTextLine("\t::: Member List Compact :::");
 		sc.addTextLine("");
@@ -92,6 +97,7 @@ public class EngConsole implements Console{
 	}
 
 	public void showMemDetail(Member mbr, BoatList btls) {
+		btls.sort();
 		Screen sc = new Screen("showMemDetail");
 		sc.addTextLine("\t:::Member's Detail:::");
 		sc.addTextLine("");
@@ -181,6 +187,7 @@ public class EngConsole implements Console{
 	}
 
 	public void showBoatList(BoatList boaList) {
+		boaList.sort();
 		Screen sc = new Screen("Boat List");
 		sc.addTextLine("\t::: Boats List :::");
 		sc.addTextLine("");
@@ -219,6 +226,7 @@ public class EngConsole implements Console{
 		System.out.println(">>>");
 	}
 
+	// returns boat type as a string
 	public String getInputBoatType() {        
 		//Scanner sc = new Scanner(System.in);
 		String Input = getInput();
@@ -246,6 +254,9 @@ public class EngConsole implements Console{
 
 	@Override
 	public void showVerbosetList(MemberList copyOfMemberList, BoatList copyOfBoatList) {
+		copyOfMemberList.sort();
+		copyOfBoatList.sort();
+		
 		Screen sc = new Screen("Member Verbose List");
 		sc.addTextLine("\t::: Member List Verbose :::");
 		sc.addTextLine("");
@@ -263,7 +274,7 @@ public class EngConsole implements Console{
 			sc.addTextLine("");
 		}
 		sc.addTextLine("");
-		sc.addTextLine("#id-Detail, a-Add, b-Back, q-Quit");
+		sc.addTextLine("#id-Detail, a-Add, c-Compact, b-Back, q-Quit");
 		sc.addCommandLine();
 		System.out.print(sc.getText());
 	}

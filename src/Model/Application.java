@@ -17,6 +17,7 @@ public class Application {
 		ConnectBoatsAndMembers();
 		}
 	
+	// Initial connection boards and members during startup from files
 	private void ConnectBoatsAndMembers() {
 		for (Boat b : this.boatList) {
 			int ownerID = b.getOwner().getUID();
@@ -26,7 +27,7 @@ public class Application {
 	}
 	
 	public MemberList getCopyOfMemberList() {
-		// 
+		// copy of current list to prevent accidental change of data by other classes 
 		return this.memberList.clone();
 	}
 
@@ -75,33 +76,6 @@ public class Application {
 		return toReturn;
 	}
 	
-//	public String[][] getBoatsByUID(int mUID) {
-//		Member mem = getMemberById(mUID);
-//		ArrayList<Boat> userSBoats = new ArrayList<Boat>();
-//		for (int i=0; i<boatList.size(); i++) {
-//			if (boatList.get(i).getOwner().equals(mem)) {
-//				userSBoats.add(boatList.get(i));
-//			}
-//		}
-//		String [][] toReturn = new String[userSBoats.size()][3];
-//		for (int i=0; i<userSBoats.size(); i++)
-//			toReturn[i] = userSBoats.get(i).toArr();
-//		
-//		return toReturn;
-//	}
-//	}
-	
-	public String[] getBoatById(String id) {
-		String[] toReturn = null;
-		int BID = Integer.valueOf(id);
-		for (Model.Boat bt : boatList) {
-			if (bt.getBID() == BID) 
-				return bt.toArr();
-		}
-		
-		return toReturn;
-	}
-
 	public void exit() {
 		Runtime.getRuntime().exit(10);
 	}
@@ -122,6 +96,7 @@ public class Application {
 		Member oldMem = this.memberList.getMemberById(tmpID);
 		Member newMem = new Member(tmpID, name, personNum);
 		this.memberList.edit(oldMem, newMem);
+		this.boatList.transferBoats(oldMem, newMem);
 		db.AddMemberFile(newMem, false);	
 	}
 	

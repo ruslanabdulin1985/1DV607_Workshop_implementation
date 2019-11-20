@@ -1,6 +1,7 @@
 package Model;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -10,6 +11,11 @@ public class MemberList implements Iterable<Member>, Cloneable {
 	public MemberList() {
 		members = new ArrayList<Member>();
 	}
+	
+	public void sort() {
+		Collections.sort(this.members);
+	}
+	
 	
 	public MemberList clone(){ 
 		// Copy of a Member List

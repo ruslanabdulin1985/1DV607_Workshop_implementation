@@ -8,6 +8,8 @@ import Model.MemberList;
 public interface Console {
 	public String getInput();
 	
+	public boolean wantsMemberList(String input);
+	
 	public boolean wantsCompactList(String input);
 	
 	public boolean wantsToQuit(String userInput);
